@@ -13,13 +13,22 @@ OAuth Scope Risk Dashboard — v2 (no live risk features while building)
 """
 
 from pathlib import Path
-from functools import lru_cache
+import os
+import threading
+import time
 import warnings
+import sys
 
 import joblib
 import numpy as np
 import pandas as pd
 import streamlit as st
+from pympler import asizeof
+
+try:
+    import psutil
+except ImportError:  # pragma: no cover
+    psutil = None
 
 # The bundled model was fit on a plain numpy array (no column names), so
 # sklearn warns every time it's called with a DataFrame instead — harmless,
@@ -152,19 +161,58 @@ def load_anchor_explainer(path: str = str(ANCHOR_EXPLAINER_PATH)):
     return _bind_anchor_predictor(explainer, _predict_with_loaded_model)
 
 
-@lru_cache(maxsize=32)
-def _compute_anchor_explanation(feature_tuple: tuple):
-    """The anchor beam search is slow (can take tens of seconds), and with
-    no caching it was re-running on *every* script rerun — not just when the
-    user submitted a new combination, but on any widget interaction on the
-    result page (expanding a panel, etc.). That made the page look hung and
-    delayed every navigation click behind another full anchor search.
+def _process_memory_mb():
+    """Current process resident memory in MB, or None if psutil isn't
+    installed. Used purely for diagnosing whether the anchor search (or
+    anything else) is pushing the app toward Streamlit Cloud's 1GB limit."""
+    if psutil is None:
+        return None
+    return psutil.Process(os.getpid()).memory_info().rss / (1024 ** 2)
 
-    Caching by the exact feature vector means it's computed once per unique
-    scope combination and instantly reused after that, for the lifetime of
-    this server process."""
-    anchor_explainer = load_anchor_explainer()
-    return anchor_explainer.explain(np.array(feature_tuple, dtype=float), threshold=0.95)
+
+def compute_anchor_explanation_with_live_memory(feature_tuple: tuple, status_placeholder=None):
+    """Run the (slow) anchor beam search in a background thread and poll
+    process memory every 0.5s from the main thread, writing it to
+    `status_placeholder` — so if a low-scope combination triggers a long
+    search, you can watch memory climb in real time instead of the UI just
+    looking hung. Cached per unique feature vector, same as before."""
+
+    result_holder, error_holder = {}, {}
+
+    def _worker():
+        try:
+            anchor_explainer = load_anchor_explainer()
+            result_holder["result"] = anchor_explainer.explain(
+                np.array(feature_tuple, dtype=float), threshold=0.95
+            )
+        except Exception as exc:  # surfaced back on the main thread below
+            error_holder["error"] = exc
+
+    thread = threading.Thread(target=_worker, daemon=True)
+    start = time.monotonic()
+    thread.start()
+
+    peak_mb = 0.0
+    while thread.is_alive():
+        mem_mb = _process_memory_mb()
+        if mem_mb is not None and status_placeholder is not None:
+            peak_mb = max(peak_mb, mem_mb)
+            elapsed = time.monotonic() - start
+            status_placeholder.caption(
+                f"🧠 Searching… {elapsed:.0f}s elapsed · memory now "
+                f"{mem_mb:.0f} MB · peak so far {peak_mb:.0f} MB"
+            )
+        time.sleep(0.5)
+    thread.join()
+
+    if status_placeholder is not None:
+        status_placeholder.empty()
+
+    if "error" in error_holder:
+        raise error_holder["error"]
+
+    result = result_holder["result"]
+    return result
 
 
 def preprocess_scopes(scope_combination: list, persistence: bool) -> pd.DataFrame:
@@ -395,6 +443,7 @@ def _go_to_build():
 # ---------------------------------------------------------------------------
 def render_build_page():
     st.title("🔐 OAuth Scope Risk Dashboard")
+    render_memory_box()
     st.write(
         "Build a combination of Google OAuth scopes, choose whether it includes an "
         "offline refresh token, then submit it to see the model's risk prediction."
@@ -498,6 +547,7 @@ def render_result_page():
     st.button("‹ Back to builder", on_click=_go_to_build)
 
     st.title("Result")
+    render_memory_box()
 
     features = preprocess_scopes(st.session_state.scopes, st.session_state.persistence)
 
@@ -541,9 +591,12 @@ def render_result_page():
                 else:
                     try:
                         feature_tuple = tuple(features.values[0].astype(float))
-                        with st.spinner("Finding the simplest rule behind this result…"):
-                            anchor_exp = _compute_anchor_explanation(feature_tuple)
+                        status_placeholder = st.empty()
+                        anchor_exp = compute_anchor_explanation_with_live_memory(
+                            feature_tuple, status_placeholder
+                        )
                         render_anchor_explanation(anchor_exp, features)
+                        del anchor_exp
                     except Exception:
                         st.info("Anchor rule is temporarily unavailable for this model.")
 
@@ -556,7 +609,7 @@ def render_result_page():
 
     st.divider()
 
-    st.subheader("Explain This To Me")
+    st.subheader(f"Explain it to me")
     st.info("Coming soon.")
 
     st.divider()
@@ -577,6 +630,20 @@ def render_result_page():
 
     st.divider()
     st.button("🔄 Start Over", on_click=reset_all)
+
+
+# ---------------------------------------------------------------------------
+# Memory readout box (diagnostic — see if the app is close to Streamlit
+# Cloud's 1GB limit). Rendered at the top of both pages, not the sidebar,
+# so it's always visible without anyone needing to open/expand anything.
+# ---------------------------------------------------------------------------
+def render_memory_box():
+    mem_mb = _process_memory_mb()
+    with st.container(border=True):
+        if mem_mb is not None:
+            st.metric("🧠 App memory usage (RSS)", f"{mem_mb:.0f} MB")
+        else:
+            st.caption("Install `psutil` to see live memory usage here.")
 
 
 # ---------------------------------------------------------------------------
