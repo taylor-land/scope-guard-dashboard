@@ -182,7 +182,7 @@ def compute_anchor_explanation_with_live_memory(feature_tuple: tuple, status_pla
         try:
             anchor_explainer = load_anchor_explainer()
             result_holder["result"] = anchor_explainer.explain(
-                np.array(feature_tuple, dtype=float), threshold=0.90,coverage_samples=1000,batch_size=50,max_anchor_size=7
+                np.array(feature_tuple, dtype=np.float32), threshold=0.90,coverage_samples=1000,batch_size=50,max_anchor_size=7
             )
         except Exception as exc:  # surfaced back on the main thread below
             error_holder["error"] = exc
