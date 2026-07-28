@@ -14,11 +14,23 @@ OAuth Scope Risk Dashboard — v2 (no live risk features while building)
 
 from pathlib import Path
 from functools import lru_cache
+import warnings
 
 import joblib
 import numpy as np
 import pandas as pd
 import streamlit as st
+
+# The bundled model was fit on a plain numpy array (no column names), so
+# sklearn warns every time it's called with a DataFrame instead — harmless,
+# but noisy enough in a UI with repeated predictions to be worth silencing
+# outright rather than relying on every call site remembering to use
+# `.values`.
+warnings.filterwarnings(
+    "ignore",
+    message="X has feature names, but .* was fitted without feature names",
+    category=UserWarning,
+)
 
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -165,8 +177,13 @@ def preprocess_scopes(scope_combination: list, persistence: bool) -> pd.DataFram
 def _shap_background(_feature_columns: tuple):
     """All-zero baseline row (no scopes selected, no offline token) used as
     the SHAP reference point. Reasonable for one-hot/binary features when no
-    training data is shipped alongside the model."""
-    return pd.DataFrame([[0] * len(_feature_columns)], columns=list(_feature_columns))
+    training data is shipped alongside the model.
+
+    Plain numpy, not a DataFrame — the model was fit on a bare array (no
+    column names), so feeding it a DataFrame here (or anywhere else it's
+    called) triggers sklearn's "X has feature names, but ... was fitted
+    without feature names" warning on every prediction."""
+    return np.zeros((1, len(_feature_columns)))
 
 
 def _build_explainer(model, features: pd.DataFrame):
@@ -193,7 +210,7 @@ def class_shap_explanation(model, features: pd.DataFrame, class_index: int):
     """Return a shap.Explanation for a single class/row, handling both the
     list-of-arrays and stacked-ndarray return shapes across shap versions."""
     explainer = _build_explainer(model, features)
-    raw = explainer(features)
+    raw = explainer(features.values)
 
     values = raw.values
     base_values = raw.base_values
@@ -486,7 +503,7 @@ def render_result_page():
 
     try:
         model = load_model()
-        prediction = int(model.predict(features)[0])
+        prediction = int(model.predict(features.values)[0])
         tier = RISK_LABELS.get(prediction, f"Unknown ({prediction})")
         color = RISK_COLORS.get(tier, "#546E7A")
 
