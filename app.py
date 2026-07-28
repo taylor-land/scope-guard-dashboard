@@ -6,13 +6,14 @@ OAuth Scope Risk Dashboard — v2 (no live risk features while building)
      live risk-feature boxes have been removed from this page — nothing about
      the model's view of the combination is shown until it's submitted.
   2. Result page (after "Submit Scope Combination"): model prediction (from
-     model.joblib) mapped to low/medium/high/critical, styled like the
+     logreg_model.joblib) mapped to low/medium/high/critical, styled like the
      ScopeGuard prototype, plus a SHAP feature-impact chart (seaborn/viridis).
      Anchor + "explain
      this to me" are left as empty placeholders for now, as instructed.
 """
 
 from pathlib import Path
+from functools import lru_cache
 
 import joblib
 import numpy as np
@@ -32,11 +33,17 @@ try:
 except ImportError:  # pragma: no cover
     shap = None
 
+try:
+    import dill
+except ImportError:  # pragma: no cover
+    dill = None
+
 from scopes_data import SERVICE_SCOPES
-from preprocessing import onehot_encoding
+from preprocessing import onehot_encoding, describe_feature, OFFLINE_FEATURE
 
 BASE_DIR = Path(__file__).resolve().parent
-MODEL_PATH = BASE_DIR / "model.joblib"
+MODEL_PATH = BASE_DIR / "logreg_model.joblib"
+ANCHOR_EXPLAINER_PATH = BASE_DIR / "anchor_explainer.dill"
 
 # ---------------------------------------------------------------------------
 # Page config
@@ -98,6 +105,54 @@ def scope_meta_line(entry: dict) -> str:
 @st.cache_resource
 def load_model(path: str = str(MODEL_PATH)):
     return joblib.load(path)
+
+
+def _bind_anchor_predictor(explainer, predictor_fn):
+    """Rebind the explainer and its samplers to a predictor closure that uses
+    the currently loaded model."""
+    for attr in ("predictor", "_predictor", "_ohe_predictor"):
+        if hasattr(explainer, attr):
+            setattr(explainer, attr, predictor_fn)
+
+    for sampler in getattr(explainer, "samplers", []) or []:
+        for attr in ("predictor", "_predictor"):
+            if hasattr(sampler, attr):
+                setattr(sampler, attr, predictor_fn)
+
+    return explainer
+
+
+@st.cache_resource
+def load_anchor_explainer(path: str = str(ANCHOR_EXPLAINER_PATH)):
+    """Load the pre-fitted alibi AnchorTabular explainer and reattach a
+    predictor closure that uses the currently loaded model."""
+    with open(path, "rb") as f:
+        explainer = dill.load(f)
+
+    def _predict_with_loaded_model(x):
+        model = load_model()
+        x_array = np.asarray(x, dtype=float)
+        if x_array.ndim == 1:
+            x_array = x_array.reshape(1, -1)
+        preds = model.predict(x_array)
+        return preds[0] if preds.ndim > 1 and preds.shape[0] == 1 else preds
+
+    return _bind_anchor_predictor(explainer, _predict_with_loaded_model)
+
+
+@lru_cache(maxsize=32)
+def _compute_anchor_explanation(feature_tuple: tuple):
+    """The anchor beam search is slow (can take tens of seconds), and with
+    no caching it was re-running on *every* script rerun — not just when the
+    user submitted a new combination, but on any widget interaction on the
+    result page (expanding a panel, etc.). That made the page look hung and
+    delayed every navigation click behind another full anchor search.
+
+    Caching by the exact feature vector means it's computed once per unique
+    scope combination and instantly reused after that, for the lifetime of
+    this server process."""
+    anchor_explainer = load_anchor_explainer()
+    return anchor_explainer.explain(np.array(feature_tuple, dtype=float), threshold=0.95)
 
 
 def preprocess_scopes(scope_combination: list, persistence: bool) -> pd.DataFrame:
@@ -163,19 +218,15 @@ def class_shap_explanation(model, features: pd.DataFrame, class_index: int):
 
 
 def plot_shap_barh(exp, max_display: int = 12):
-    """Render a shap.Explanation as a horizontal seaborn bar chart (viridis
-    palette) instead of shap's built-in waterfall plot.
+    """Render a shap.Explanation as a horizontal seaborn bar chart with
+    sign-based colors instead of shap's built-in waterfall plot.
 
     Ordering: most significant (largest |impact|) at the top, down to least
     significant — e.g. values 1.5, -0.9, 0.3 render top-to-bottom in that
     order, regardless of sign.
 
-    Color: signed value on a viridis scale centered at zero, so the color
-    encodes *direction* as well as magnitude — features pushing the
-    prediction toward the predicted tier land on the bright green/yellow end,
-    features pushing away from it land on the dark purple end. The scale is
-    symmetric around zero (based on the largest |impact| shown) so a
-    colorbar can display the full range, including negative impacts.
+    Color: positive values use seaborn's Paired[3] and negative values use
+    Paired[2].
 
     Labels: every feature here is a binary 0/1 one-hot column, so each bar's
     label also states whether it was the *presence* (scope/service selected,
@@ -198,11 +249,9 @@ def plot_shap_barh(exp, max_display: int = 12):
     ]
     plot_df = pd.DataFrame({"feature": plot_labels, "shap_value": plot_values})
 
-    max_abs = np.abs(plot_values).max()
-    max_abs = max_abs if max_abs > 0 else 1.0
-    norm = plt.Normalize(vmin=-max_abs, vmax=max_abs)
-    cmap = plt.cm.viridis
-    palette = [cmap(norm(v)) for v in plot_df["shap_value"]]
+    positive_color = sns.color_palette("Paired")[3]
+    negative_color = sns.color_palette("Paired")[2]
+    palette = [positive_color if v >= 0 else negative_color for v in plot_df["shap_value"]]
 
     sns.set_style("whitegrid")
     fig, ax = plt.subplots(figsize=(8.2, 0.42 * len(plot_df) + 1.6))
@@ -216,17 +265,90 @@ def plot_shap_barh(exp, max_display: int = 12):
                  fontsize=11, loc="left")
     sns.despine(left=True, bottom=True)
 
-    sm = plt.cm.ScalarMappable(cmap=cmap, norm=norm)
-    sm.set_array([])
-    cbar = fig.colorbar(sm, ax=ax, orientation="horizontal", pad=0.22, fraction=0.05, aspect=30)
-    cbar.set_label(
-        "purple = pushes away from predicted tier   ·   green/yellow = pushes toward predicted tier",
-        fontsize=8,
-    )
-    cbar.ax.tick_params(labelsize=7)
+    ax.legend(handles=[
+        plt.Line2D([0], [0], color=positive_color, lw=6, label="positive SHAP value"),
+        plt.Line2D([0], [0], color=negative_color, lw=6, label="negative SHAP value"),
+    ], frameon=False, loc="lower right", fontsize=8)
 
     fig.tight_layout()
     return fig
+
+
+# ---------------------------------------------------------------------------
+# Anchor ("the rule") explanation
+# ---------------------------------------------------------------------------
+import re
+
+_NUMBER_RE = re.compile(r"^-?\d+\.?\d*$")
+_COMPARISON_TOKENS = {"<", "<=", ">", ">=", "=", "=="}
+
+
+def _feature_name_from_predicate(predicate: str, known_columns: set) -> str | None:
+    """Anchor rule conditions come back as strings like
+    ``'gmail.readonly > 0.50'`` or two-sided ranges like
+    ``'0.00 < offline <= 1.00'``. Rather than parse the threshold, just pull
+    out whichever token is one of our known feature/column names — we already
+    know the actual 0/1 value for this instance from ``features``."""
+    for token in predicate.split():
+        if token in _COMPARISON_TOKENS or _NUMBER_RE.match(token):
+            continue
+        if token in known_columns:
+            return token
+    return None
+
+
+def render_anchor_explanation(anchor_exp, features: pd.DataFrame):
+    """Render an alibi AnchorTabular explanation as a plain-language rule:
+    'as long as these conditions hold, the model gives this same verdict
+    X% of the time, and conditions like this come up Y% of the time.'
+
+    Only "present" conditions are shown (e.g. "the Gmail scope is included"),
+    since anchor conditions on scopes/services the user *didn't* select are
+    mostly noise for a non-technical reader — a combination with a couple of
+    scopes will trivially satisfy "no Fitness scope is included" and dozens
+    of others like it. The offline flag is the one exception: whether an
+    offline refresh token is or isn't requested is itself a meaningful,
+    user-set choice either way, so both directions are kept for it."""
+    predicates = list(anchor_exp.data["anchor"])
+    precision = anchor_exp.data["precision"]
+    coverage = anchor_exp.data["coverage"]
+
+    if not predicates:
+        st.info(
+            "No short, stable rule was found for this exact combination — "
+            "the model's decision here depends on a broader mix of factors."
+        )
+        return
+
+    known_columns = set(features.columns)
+    clauses = []
+    for predicate in predicates:
+        feature_name = _feature_name_from_predicate(predicate, known_columns)
+        if feature_name is None:
+            clauses.append(predicate)  # fallback: show the raw condition
+            continue
+        present = bool(round(features.iloc[0][feature_name]))
+        if not present and feature_name != OFFLINE_FEATURE:
+            continue  # drop "X is not included" clauses
+        clauses.append(describe_feature(feature_name, present))
+
+    if not clauses:
+        st.markdown(
+            "This rule relies only on scopes and services that are **absent** "
+            "from your combination — nothing you actually selected was singled "
+            "out as the deciding factor."
+        )
+    else:
+        st.markdown("**As long as:**")
+        for clause in clauses:
+            st.markdown(f"- {clause}")
+
+    st.markdown(
+        f"…the model reaches **this same risk verdict about "
+        f"{precision * 100:.0f}% of the time**, and a combination fitting "
+        f"this rule shows up in roughly **{coverage * 100:.0f}% of the "
+        f"combinations** the model sees overall."
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -245,6 +367,10 @@ for key, value in defaults.items():
 def reset_all():
     for key, value in defaults.items():
         st.session_state[key] = value
+
+
+def _go_to_build():
+    st.session_state.page = "build"
 
 
 # ---------------------------------------------------------------------------
@@ -352,9 +478,7 @@ def render_build_page():
 # RESULT PAGE
 # ---------------------------------------------------------------------------
 def render_result_page():
-    if st.button("‹ Back to builder"):
-        st.session_state.page = "build"
-        st.rerun()
+    st.button("‹ Back to builder", on_click=_go_to_build)
 
     st.title("Result")
 
@@ -395,7 +519,16 @@ def render_result_page():
         with col_anchor:
             st.markdown("**The Rule — Anchor**")
             with st.expander("🔗 Anchor rule", expanded=False):
-                st.info("Coming soon.")
+                if dill is None:
+                    st.warning("Unable to compute the anchor rule (dill is not installed).")
+                else:
+                    try:
+                        feature_tuple = tuple(features.values[0].astype(float))
+                        with st.spinner("Finding the simplest rule behind this result…"):
+                            anchor_exp = _compute_anchor_explanation(feature_tuple)
+                        render_anchor_explanation(anchor_exp, features)
+                    except Exception:
+                        st.info("Anchor rule is temporarily unavailable for this model.")
 
         with st.expander("Risk class descriptions", expanded=False):
             for label in ("Low", "Medium", "High", "Critical"):
@@ -426,9 +559,7 @@ def render_result_page():
         st.dataframe(features, use_container_width=True)
 
     st.divider()
-    if st.button("🔄 Start Over"):
-        reset_all()
-        st.rerun()
+    st.button("🔄 Start Over", on_click=reset_all)
 
 
 # ---------------------------------------------------------------------------

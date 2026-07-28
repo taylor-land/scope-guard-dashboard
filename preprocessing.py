@@ -122,6 +122,50 @@ def build_model_input(scope_list, include_offline=False):
     return onehot_encoding(scope_list, include_offline)
 
 
+@lru_cache(maxsize=1)
+def _short_name_lookup():
+    """Reverse of ``_short_name``: map every known short feature name back to
+    its scope URL, description, and service, so the UI can turn a raw model
+    column name into something a non-technical user can read."""
+    lookup = {}
+    for scope_url, entry in SCOPE_DB.items():
+        lookup[_short_name(scope_url)] = {
+            "scope_url": scope_url,
+            "description": entry["description"],
+            "service": entry["service"],
+        }
+    return lookup
+
+
+def describe_feature(feature_name: str, present: bool) -> str:
+    """Turn one model feature name (a scope short name, a ``svc:<Service>``
+    flag, or ``offline``) plus whether it's present/absent for this instance
+    into a plain-language clause a non-technical user can read.
+
+    Used to translate raw column names — from things like the anchor
+    explainer's rule conditions — into readable sentences.
+    """
+    if feature_name == OFFLINE_FEATURE:
+        return (
+            "an offline refresh token is requested"
+            if present
+            else "no offline refresh token is requested"
+        )
+    if feature_name.startswith(SERVICE_FEATURE_PREFIX):
+        service = feature_name[len(SERVICE_FEATURE_PREFIX):]
+        return (
+            f"at least one {service} scope is included"
+            if present
+            else f"no {service} scope is included"
+        )
+    entry = _short_name_lookup().get(feature_name)
+    if entry:
+        label = f"the \u201c{entry['description']}\u201d scope ({entry['service']})"
+    else:
+        label = f"`{feature_name}`"
+    return f"{label} is included" if present else f"{label} is not included"
+
+
 def engineer_features(scope_list, include_offline):
     """
     Interpretable engineered risk features. No longer part of the model input;
