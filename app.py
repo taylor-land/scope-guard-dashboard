@@ -182,7 +182,7 @@ def compute_anchor_explanation_with_live_memory(feature_tuple: tuple, status_pla
         try:
             anchor_explainer = load_anchor_explainer()
             result_holder["result"] = anchor_explainer.explain(
-                np.array(feature_tuple, dtype=float), threshold=0.8
+                np.array(feature_tuple, dtype=float), threshold=0.90,coverage_samples=1000,batch_size=50,max_anchor_size=7
             )
         except Exception as exc:  # surfaced back on the main thread below
             error_holder["error"] = exc
@@ -393,8 +393,6 @@ def render_anchor_explanation(anchor_exp, features: pd.DataFrame):
             clauses.append(predicate)  # fallback: show the raw condition
             continue
         present = bool(round(features.iloc[0][feature_name]))
-        if not present and feature_name != OFFLINE_FEATURE:
-            continue  # drop "X is not included" clauses
         clauses.append(describe_feature(feature_name, present))
 
     if not clauses:
