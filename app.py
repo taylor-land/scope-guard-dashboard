@@ -23,7 +23,6 @@ import joblib
 import numpy as np
 import pandas as pd
 import streamlit as st
-from pympler import asizeof
 
 try:
     import psutil
@@ -183,7 +182,7 @@ def compute_anchor_explanation_with_live_memory(feature_tuple: tuple, status_pla
         try:
             anchor_explainer = load_anchor_explainer()
             result_holder["result"] = anchor_explainer.explain(
-                np.array(feature_tuple, dtype=float), threshold=0.95
+                np.array(feature_tuple, dtype=float), threshold=0.8
             )
         except Exception as exc:  # surfaced back on the main thread below
             error_holder["error"] = exc
@@ -212,6 +211,7 @@ def compute_anchor_explanation_with_live_memory(feature_tuple: tuple, status_pla
         raise error_holder["error"]
 
     result = result_holder["result"]
+
     return result
 
 
