@@ -13,6 +13,8 @@ OAuth Scope Risk Dashboard — v2 (no live risk features while building)
 """
 
 from pathlib import Path
+import ctypes
+import gc
 import os
 import threading
 import time
@@ -169,6 +171,28 @@ def _process_memory_mb():
     return psutil.Process(os.getpid()).memory_info().rss / (1024 ** 2)
 
 
+def _trim_memory():
+    """Ask glibc to hand freed heap pages back to the OS. Python/CPython
+    frees objects at the interpreter level immediately, but the underlying
+    C allocator often keeps those pages reserved for reuse rather than
+    releasing them — so RSS can stay elevated after a big allocation even
+    though nothing is actually leaked. This forces a real release. Linux
+    only (glibc); silently no-ops elsewhere (e.g. local macOS dev)."""
+    try:
+        ctypes.CDLL("libc.so.6").malloc_trim(0)
+    except Exception:
+        pass
+
+
+# Only one anchor search runs at a time across the whole process. The
+# anchor explainer/model are cached via @st.cache_resource — one shared
+# instance for every session — so two users submitting at the same moment
+# would otherwise run two full beam searches concurrently in the same
+# process, each generating its own perturbed-sample batches and roughly
+# multiplying peak memory by the number of concurrent searches.
+_anchor_search_lock = threading.Lock()
+
+
 def compute_anchor_explanation_with_live_memory(feature_tuple: tuple, status_placeholder=None):
     """Run the (slow) anchor beam search in a background thread and poll
     process memory every 0.5s from the main thread, writing it to
@@ -179,10 +203,33 @@ def compute_anchor_explanation_with_live_memory(feature_tuple: tuple, status_pla
 
     def _worker():
         try:
-            anchor_explainer = load_anchor_explainer()
-            result_holder["result"] = anchor_explainer.explain(
-                np.array(feature_tuple, dtype=np.int8), threshold=0.90,coverage_samples=1500,batch_size=50,max_anchor_size=7,random_state=42
-            )
+            with _anchor_search_lock:
+                anchor_explainer = load_anchor_explainer()
+                result_holder["result"] = anchor_explainer.explain(
+                    np.array(feature_tuple, dtype=np.int8),
+                    threshold=0.90,
+                    coverage_samples=1500,
+                    batch_size=50,
+                    max_anchor_size=7,
+                    stop_on_first=True,
+                    random_state=42,
+                )
+
+                # alibi stores the beam-search object as `self.mab` on the
+                # explainer itself after every call — and since this
+                # explainer is a single @st.cache_resource instance shared
+                # across the whole app, that state (including its cached
+                # sample batches) would otherwise sit in memory until the
+                # *next* search overwrites it. Drop it immediately instead.
+                anchor_explainer.mab = None
+
+            # Break any reference cycles (numpy/sklearn objects sometimes
+            # hold circular refs the refcounter alone won't clear), then
+            # ask glibc to actually return the freed pages to the OS —
+            # otherwise RSS can stay elevated between combinations even
+            # though nothing here is truly leaked.
+            gc.collect()
+            _trim_memory()
         except Exception as exc:  # surfaced back on the main thread below
             error_holder["error"] = exc
 
@@ -577,6 +624,7 @@ def render_result_page():
                         exp = class_shap_explanation(model, features, prediction)
                         fig = plot_shap_barh(exp, max_display=12)
                         st.pyplot(fig, clear_figure=True)
+                        plt.close(fig)
                     except Exception as shap_error:
                         st.warning(f"Unable to render SHAP chart ({shap_error}).")
 
@@ -594,6 +642,8 @@ def render_result_page():
                         )
                         render_anchor_explanation(anchor_exp, features)
                         del anchor_exp
+                        gc.collect()
+                        _trim_memory()
                     except Exception:
                         st.info("Anchor rule is temporarily unavailable for this model.")
 
