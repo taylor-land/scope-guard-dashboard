@@ -26,6 +26,14 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 
+from langchain_classic import ConversationChain, LLMChain
+from langchain_classic.prompts import (
+    ChatPromptTemplate,
+    HumanMessagePromptTemplate,
+)
+from langchain_core.messages import SystemMessage
+from langchain_groq import ChatGroq
+
 try:
     import psutil
 except ImportError:  # pragma: no cover
@@ -59,6 +67,8 @@ try:
     import dill
 except ImportError:  # pragma: no cover
     dill = None
+
+API_KEY = st.secrets["API_KEY"] # insert your own api key here
 
 from scopes_data import SERVICE_SCOPES
 from preprocessing import onehot_encoding, describe_feature, OFFLINE_FEATURE
@@ -382,7 +392,7 @@ def plot_shap_barh(exp, max_display: int = 12):
     ], frameon=False, loc="lower right", fontsize=8)
 
     fig.tight_layout()
-    return fig
+    return fig, plot_df
 
 
 # ---------------------------------------------------------------------------
@@ -587,6 +597,29 @@ def render_build_page():
 # ---------------------------------------------------------------------------
 # RESULT PAGE
 # ---------------------------------------------------------------------------
+
+#------------------------
+# Initializing chatbot
+#------------------------
+system_prompt = """
+DO NOT USE PERSONAL PROGRAMS. Refer to the model as the model, not you. You did not make the prediction, the model did.
+You are trying to explain to users with a non techinical background why a model made a desicion to classify a Google OAuth combination + offline acess variable as a certain risk level.
+The risk levels are low, medium, high and critical, here are descriptions:
+    0 Low: Read-only access to non-sensitive data. Minimal damage potential if the app is compromised,
+    1 Medium: Read access to moderately sensitive data or write access to non-sensitive data. Limited damage potential.
+    2 High: Write access to sensitive data, persistent access to email or files, or any admin-level scope. Significant damage potential.
+    3 Critical: Full access to email or admin with persistence, or broad multi-service access with high privileges. Maximum damage potential.
+EXPLAIN WHAT A POSITIVE SHAP VALUE IS, something brief but along the lines of it increasing the models confidence that a scope combination is a certain risk tier. Vice versa for negative.
+You are the models prediction, and the scopes. Summarize why the model made the prediction it did using these.
+Keep responces to the point. Include specifically the most infulential positive shap value feature. Include brief descirption of what that feature does.
+IF there are any negative shap values MAKE SURE TO STATE them.
+        """
+model = 'llama-3.1-8b-instant'
+groq_chat = ChatGroq(
+            groq_api_key=API_KEY, 
+            model_name=model
+)
+
 def render_result_page():
     st.button("‹ Back to builder", on_click=_go_to_build)
 
@@ -622,7 +655,7 @@ def render_result_page():
                 else:
                     try:
                         exp = class_shap_explanation(model, features, prediction)
-                        fig = plot_shap_barh(exp, max_display=12)
+                        fig, plot_df = plot_shap_barh(exp, max_display=12)
                         st.pyplot(fig, clear_figure=True)
                         plt.close(fig)
                     except Exception as shap_error:
@@ -655,9 +688,47 @@ def render_result_page():
         st.warning(f"Model/preprocessing pipeline error ({e}). Showing placeholder output instead.")
 
     st.divider()
+    st.markdown("**Plain Language Explanations**")
+    # Natural language explanation (SHAP)
+    with st.expander('Explain it to me (SHAP backed)',expanded=False):
+        #storing information to send to llm in information
+        information = f'Model prediction: {prediction} |||| Scopes:  '
 
-    st.subheader(f"Explain it to me")
-    st.info("Coming soon.")
+        #converting shap scope data into string format for llm
+        #grabbing rows where shap_value > 0:
+        shap_scope_df = plot_df[plot_df['shap_value']>0]
+
+        #converting series of significant scopes and shap values into list
+        shap_scope_features = shap_scope_df['feature'].to_list()
+        shap_scope_values = shap_scope_df['shap_value'].to_list()
+
+        #dumping scope features and values to string:
+        for i in range(len(shap_scope_features)):
+            information += f'Scope {i+1}: {shap_scope_features[i]}, '
+            information += f'\n\tShap value: {shap_scope_values[i]} || '
+
+        #Generating explanation:
+        prompt = ChatPromptTemplate.from_messages(
+            [
+                SystemMessage(
+                    content=system_prompt
+                ),  # This is the persistent system prompt that is always included at the start of the chat.
+                HumanMessagePromptTemplate.from_template(
+                    "{current_combo_info}"
+                ),  # This template is where the scope input will be injected into the prompt.
+            ]
+        )
+
+        # Create a conversation chain using the LangChain LLM (Language Learning Model)
+        conversation = LLMChain(
+            llm=groq_chat,  # The Groq LangChain chat object initialized earlier.
+            prompt=prompt,  # The constructed prompt template.
+            verbose=True,   # Enables verbose output, which can be useful for debugging..
+        )
+        response = conversation.predict(current_combo_info=information)
+
+
+        st.markdown(response)
 
     st.divider()
 
