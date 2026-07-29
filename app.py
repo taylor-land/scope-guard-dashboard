@@ -26,7 +26,7 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 
-from langchain_classic import ConversationChain, LLMChain
+from langchain_classic import LLMChain
 from langchain_classic.prompts import (
     ChatPromptTemplate,
     HumanMessagePromptTemplate,
@@ -466,7 +466,7 @@ def render_anchor_explanation(anchor_exp, features: pd.DataFrame):
         f"…the model reaches **this same risk verdict about "
         f"{precision * 100:.0f}% of the time**, and a combination fitting "
         f"this rule shows up in roughly **{coverage * 100:.0f}% of the "
-        f"combinations** the model sees overall."
+        f"combinations** the model sees overall in its training."
     )
 
 
@@ -602,7 +602,7 @@ def render_build_page():
 # Initializing chatbot
 #------------------------
 system_prompt = """
-DO NOT USE PERSONAL PROGRAMS. Refer to the model as the model, not you. You did not make the prediction, the model did.
+DO NOT USE PERSONAL PRONOUNS. Refer to the model as the model, not you. You did not make the prediction, the model did.
 You are trying to explain to users with a non techinical background why a model made a desicion to classify a Google OAuth combination + offline acess variable as a certain risk level.
 The risk levels are low, medium, high and critical, here are descriptions:
     0 Low: Read-only access to non-sensitive data. Minimal damage potential if the app is compromised,
@@ -612,7 +612,7 @@ The risk levels are low, medium, high and critical, here are descriptions:
 EXPLAIN WHAT A POSITIVE SHAP VALUE IS, something brief but along the lines of it increasing the models confidence that a scope combination is a certain risk tier. Vice versa for negative.
 You are the models prediction, and the scopes. Summarize why the model made the prediction it did using these.
 Keep responces to the point. Include specifically the most infulential positive shap value feature. Include brief descirption of what that feature does.
-IF there are any negative shap values MAKE SURE TO STATE them.
+IF there are any negative shap values MAKE SURE TO STATE them.  Round off all shap values to thousandith place
         """
 model = 'llama-3.1-8b-instant'
 groq_chat = ChatGroq(
@@ -696,8 +696,7 @@ def render_result_page():
 
         #converting shap scope data into string format for llm
         #grabbing rows where shap_value > 0:
-        shap_scope_df = plot_df[plot_df['shap_value']>0]
-
+        shap_scope_df = plot_df[plot_df['shap_value']!=0]
         #converting series of significant scopes and shap values into list
         shap_scope_features = shap_scope_df['feature'].to_list()
         shap_scope_values = shap_scope_df['shap_value'].to_list()
