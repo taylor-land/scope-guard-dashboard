@@ -175,14 +175,13 @@ def compute_anchor_explanation_with_live_memory(feature_tuple: tuple, status_pla
     `status_placeholder` — so if a low-scope combination triggers a long
     search, you can watch memory climb in real time instead of the UI just
     looking hung. Cached per unique feature vector, same as before."""
-
     result_holder, error_holder = {}, {}
 
     def _worker():
         try:
             anchor_explainer = load_anchor_explainer()
             result_holder["result"] = anchor_explainer.explain(
-                np.array(feature_tuple, dtype=np.float32), threshold=0.90,#coverage_samples=1000,batch_size=50,max_anchor_size=7
+                np.array(feature_tuple, dtype=np.int8), threshold=0.90,coverage_samples=1500,batch_size=50,max_anchor_size=7,random_state=42
             )
         except Exception as exc:  # surfaced back on the main thread below
             error_holder["error"] = exc
