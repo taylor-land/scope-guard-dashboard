@@ -1,0 +1,817 @@
+{
+    "SCOPE_DB": {
+        "https://mail.google.com/": {
+            "service": "Gmail",
+            "access_type": "full_access",
+            "google_classification": "restricted",
+            "description": "Read, compose, send, and permanently delete all your email from Gmail"
+        },
+        "https://www.googleapis.com/auth/gmail.addons.current.action.compose": {
+            "service": "Gmail",
+            "access_type": "write",
+            "google_classification": "sensitive",
+            "description": "Manage drafts and send emails when you interact with the add-on"
+        },
+        "https://www.googleapis.com/auth/gmail.addons.current.message.action": {
+            "service": "Gmail",
+            "access_type": "read",
+            "google_classification": "sensitive",
+            "description": "View your email messages when you interact with the add-on"
+        },
+        "https://www.googleapis.com/auth/gmail.addons.current.message.metadata": {
+            "service": "Gmail",
+            "access_type": "read",
+            "google_classification": "sensitive",
+            "description": "View your email message metadata when the add-on is running"
+        },
+        "https://www.googleapis.com/auth/gmail.addons.current.message.readonly": {
+            "service": "Gmail",
+            "access_type": "read",
+            "google_classification": "sensitive",
+            "description": "View your email messages when the add-on is running"
+        },
+        "https://www.googleapis.com/auth/gmail.compose": {
+            "service": "Gmail",
+            "access_type": "write",
+            "google_classification": "sensitive",
+            "description": "Manage drafts and send emails"
+        },
+        "https://www.googleapis.com/auth/gmail.insert": {
+            "service": "Gmail",
+            "access_type": "write",
+            "google_classification": "sensitive",
+            "description": "Add emails into your Gmail mailbox"
+        },
+        "https://www.googleapis.com/auth/gmail.labels": {
+            "service": "Gmail",
+            "access_type": "read_write",
+            "google_classification": "sensitive",
+            "description": "See and edit your email labels"
+        },
+        "https://www.googleapis.com/auth/gmail.metadata": {
+            "service": "Gmail",
+            "access_type": "read",
+            "google_classification": "sensitive",
+            "description": "View your email message metadata such as labels and headers, but not the email body"
+        },
+        "https://www.googleapis.com/auth/gmail.modify": {
+            "service": "Gmail",
+            "access_type": "read_write",
+            "google_classification": "restricted",
+            "description": "Read, compose, and send emails from your Gmail account"
+        },
+        "https://www.googleapis.com/auth/gmail.readonly": {
+            "service": "Gmail",
+            "access_type": "read",
+            "google_classification": "restricted",
+            "description": "View your email messages and settings"
+        },
+        "https://www.googleapis.com/auth/gmail.send": {
+            "service": "Gmail",
+            "access_type": "write",
+            "google_classification": "restricted",
+            "description": "Send email on your behalf"
+        },
+        "https://www.googleapis.com/auth/gmail.settings.basic": {
+            "service": "Gmail",
+            "access_type": "read_write",
+            "google_classification": "sensitive",
+            "description": "See, edit, create, or change your email settings and filters in Gmail"
+        },
+        "https://www.googleapis.com/auth/gmail.settings.sharing": {
+            "service": "Gmail",
+            "access_type": "write",
+            "google_classification": "restricted",
+            "description": "Manage your sensitive mail settings, including who can manage your mail"
+        },
+        "https://www.googleapis.com/auth/drive": {
+            "service": "Drive",
+            "access_type": "full_access",
+            "google_classification": "restricted",
+            "description": "See, edit, create, and delete all of your Google Drive files"
+        },
+        "https://www.googleapis.com/auth/drive.appdata": {
+            "service": "Drive",
+            "access_type": "read_write",
+            "google_classification": "non_sensitive",
+            "description": "See, create, and delete its own configuration data in your Google Drive"
+        },
+        "https://www.googleapis.com/auth/drive.file": {
+            "service": "Drive",
+            "access_type": "read_write",
+            "google_classification": "non_sensitive",
+            "description": "See, edit, create, and delete only the specific Google Drive files you use with this app"
+        },
+        "https://www.googleapis.com/auth/drive.metadata": {
+            "service": "Drive",
+            "access_type": "read_write",
+            "google_classification": "sensitive",
+            "description": "View and manage metadata of files in your Google Drive"
+        },
+        "https://www.googleapis.com/auth/drive.metadata.readonly": {
+            "service": "Drive",
+            "access_type": "read",
+            "google_classification": "sensitive",
+            "description": "See information about your Google Drive files"
+        },
+        "https://www.googleapis.com/auth/drive.photos.readonly": {
+            "service": "Drive",
+            "access_type": "read",
+            "google_classification": "sensitive",
+            "description": "View the photos, videos and albums in your Google Photos"
+        },
+        "https://www.googleapis.com/auth/drive.readonly": {
+            "service": "Drive",
+            "access_type": "read",
+            "google_classification": "restricted",
+            "description": "See and download all your Google Drive files"
+        },
+        "https://www.googleapis.com/auth/drive.scripts": {
+            "service": "Drive",
+            "access_type": "write",
+            "google_classification": "sensitive",
+            "description": "Modify your Google Apps Script scripts' behavior"
+        },
+        "https://www.googleapis.com/auth/drive.activity": {
+            "service": "Drive",
+            "access_type": "read_write",
+            "google_classification": "sensitive",
+            "description": "View and add to the activity record of files in your Google Drive"
+        },
+        "https://www.googleapis.com/auth/drive.activity.readonly": {
+            "service": "Drive",
+            "access_type": "read",
+            "google_classification": "sensitive",
+            "description": "View the activity record of files in your Google Drive"
+        },
+        "https://www.googleapis.com/auth/calendar": {
+            "service": "Calendar",
+            "access_type": "full_access",
+            "google_classification": "sensitive",
+            "description": "See, edit, share, and permanently delete all the calendars you can access using Google Calendar"
+        },
+        "https://www.googleapis.com/auth/calendar.acls": {
+            "service": "Calendar",
+            "access_type": "read_write",
+            "google_classification": "sensitive",
+            "description": "See and change the sharing permissions of Google calendars you own"
+        },
+        "https://www.googleapis.com/auth/calendar.acls.readonly": {
+            "service": "Calendar",
+            "access_type": "read",
+            "google_classification": "sensitive",
+            "description": "See the sharing permissions of Google calendars you own"
+        },
+        "https://www.googleapis.com/auth/calendar.app.created": {
+            "service": "Calendar",
+            "access_type": "read_write",
+            "google_classification": "non_sensitive",
+            "description": "Make secondary Google calendars, and see, create, change, and delete events on them"
+        },
+        "https://www.googleapis.com/auth/calendar.calendarlist": {
+            "service": "Calendar",
+            "access_type": "read_write",
+            "google_classification": "sensitive",
+            "description": "See, add, and remove Google calendars you're subscribed to"
+        },
+        "https://www.googleapis.com/auth/calendar.calendarlist.readonly": {
+            "service": "Calendar",
+            "access_type": "read",
+            "google_classification": "sensitive",
+            "description": "See the list of Google calendars you're subscribed to"
+        },
+        "https://www.googleapis.com/auth/calendar.calendars": {
+            "service": "Calendar",
+            "access_type": "read_write",
+            "google_classification": "sensitive",
+            "description": "See and change the properties of Google calendars you have access to, and create secondary calendars"
+        },
+        "https://www.googleapis.com/auth/calendar.calendars.readonly": {
+            "service": "Calendar",
+            "access_type": "read",
+            "google_classification": "sensitive",
+            "description": "See the title, description, default time zone, and other properties of Google calendars you have access to"
+        },
+        "https://www.googleapis.com/auth/calendar.events": {
+            "service": "Calendar",
+            "access_type": "read_write",
+            "google_classification": "sensitive",
+            "description": "View and edit events on all your calendars"
+        },
+        "https://www.googleapis.com/auth/calendar.events.freebusy": {
+            "service": "Calendar",
+            "access_type": "read",
+            "google_classification": "non_sensitive",
+            "description": "See the availability on Google calendars you have access to"
+        },
+        "https://www.googleapis.com/auth/calendar.events.owned": {
+            "service": "Calendar",
+            "access_type": "read_write",
+            "google_classification": "sensitive",
+            "description": "See, create, change, and delete events on Google calendars you own"
+        },
+        "https://www.googleapis.com/auth/calendar.events.owned.readonly": {
+            "service": "Calendar",
+            "access_type": "read",
+            "google_classification": "sensitive",
+            "description": "See the events on Google calendars you own"
+        },
+        "https://www.googleapis.com/auth/calendar.events.public.readonly": {
+            "service": "Calendar",
+            "access_type": "read",
+            "google_classification": "non_sensitive",
+            "description": "See the events on public calendars"
+        },
+        "https://www.googleapis.com/auth/calendar.events.readonly": {
+            "service": "Calendar",
+            "access_type": "read",
+            "google_classification": "sensitive",
+            "description": "View events on all your calendars"
+        },
+        "https://www.googleapis.com/auth/calendar.freebusy": {
+            "service": "Calendar",
+            "access_type": "read",
+            "google_classification": "non_sensitive",
+            "description": "View your availability in your calendars"
+        },
+        "https://www.googleapis.com/auth/calendar.readonly": {
+            "service": "Calendar",
+            "access_type": "read",
+            "google_classification": "sensitive",
+            "description": "See and download any calendar you can access using your Google Calendar"
+        },
+        "https://www.googleapis.com/auth/calendar.settings.readonly": {
+            "service": "Calendar",
+            "access_type": "read",
+            "google_classification": "sensitive",
+            "description": "View your Calendar settings"
+        },
+        "https://www.googleapis.com/auth/contacts": {
+            "service": "Contacts",
+            "access_type": "full_access",
+            "google_classification": "restricted",
+            "description": "See, edit, download, and permanently delete your contacts"
+        },
+        "https://www.googleapis.com/auth/contacts.readonly": {
+            "service": "Contacts",
+            "access_type": "read",
+            "google_classification": "sensitive",
+            "description": "See and download your contacts"
+        },
+        "https://www.googleapis.com/auth/contacts.other.readonly": {
+            "service": "Contacts",
+            "access_type": "read",
+            "google_classification": "sensitive",
+            "description": "See and download contact info automatically saved in your 'Other contacts'"
+        },
+        "https://www.googleapis.com/auth/directory.readonly": {
+            "service": "Contacts",
+            "access_type": "read",
+            "google_classification": "sensitive",
+            "description": "See and download your organization's GSuite directory"
+        },
+        "https://www.googleapis.com/auth/user.addresses.read": {
+            "service": "Contacts",
+            "access_type": "read",
+            "google_classification": "sensitive",
+            "description": "View your street addresses"
+        },
+        "https://www.googleapis.com/auth/user.birthday.read": {
+            "service": "Contacts",
+            "access_type": "read",
+            "google_classification": "sensitive",
+            "description": "See and download your exact date of birth"
+        },
+        "https://www.googleapis.com/auth/user.emails.read": {
+            "service": "Contacts",
+            "access_type": "read",
+            "google_classification": "sensitive",
+            "description": "See and download all email addresses associated with your Google Account"
+        },
+        "https://www.googleapis.com/auth/user.gender.read": {
+            "service": "Contacts",
+            "access_type": "read",
+            "google_classification": "sensitive",
+            "description": "See your gender"
+        },
+        "https://www.googleapis.com/auth/user.organization.read": {
+            "service": "Contacts",
+            "access_type": "read",
+            "google_classification": "sensitive",
+            "description": "See your education, work history and org info"
+        },
+        "https://www.googleapis.com/auth/user.phonenumbers.read": {
+            "service": "Contacts",
+            "access_type": "read",
+            "google_classification": "sensitive",
+            "description": "See and download your personal phone numbers"
+        },
+        "https://www.googleapis.com/auth/userinfo.email": {
+            "service": "Identity",
+            "access_type": "read",
+            "google_classification": "non_sensitive",
+            "description": "See your primary Google Account email address"
+        },
+        "https://www.googleapis.com/auth/userinfo.profile": {
+            "service": "Identity",
+            "access_type": "read",
+            "google_classification": "non_sensitive",
+            "description": "See your personal info, including any personal info you've made publicly available"
+        },
+        "openid": {
+            "service": "Identity",
+            "access_type": "read",
+            "google_classification": "non_sensitive",
+            "description": "Authenticate using OpenID Connect"
+        },
+        "profile": {
+            "service": "Identity",
+            "access_type": "read",
+            "google_classification": "non_sensitive",
+            "description": "View basic profile info"
+        },
+        "email": {
+            "service": "Identity",
+            "access_type": "read",
+            "google_classification": "non_sensitive",
+            "description": "View email address"
+        },
+        "https://www.googleapis.com/auth/documents": {
+            "service": "Docs",
+            "access_type": "full_access",
+            "google_classification": "sensitive",
+            "description": "See, edit, create, and delete all your Google Docs documents"
+        },
+        "https://www.googleapis.com/auth/documents.readonly": {
+            "service": "Docs",
+            "access_type": "read",
+            "google_classification": "sensitive",
+            "description": "See all your Google Docs documents"
+        },
+        "https://www.googleapis.com/auth/spreadsheets": {
+            "service": "Sheets",
+            "access_type": "full_access",
+            "google_classification": "sensitive",
+            "description": "See, edit, create, and delete all your Google Sheets spreadsheets"
+        },
+        "https://www.googleapis.com/auth/spreadsheets.readonly": {
+            "service": "Sheets",
+            "access_type": "read",
+            "google_classification": "sensitive",
+            "description": "See all your Google Sheets spreadsheets"
+        },
+        "https://www.googleapis.com/auth/presentations": {
+            "service": "Slides",
+            "access_type": "full_access",
+            "google_classification": "sensitive",
+            "description": "See, edit, create, and delete all your Google Slides presentations"
+        },
+        "https://www.googleapis.com/auth/presentations.readonly": {
+            "service": "Slides",
+            "access_type": "read",
+            "google_classification": "sensitive",
+            "description": "See all your Google Slides presentations"
+        },
+        "https://www.googleapis.com/auth/forms": {
+            "service": "Forms",
+            "access_type": "read_write",
+            "google_classification": "sensitive",
+            "description": "View and manage your forms in Google Drive"
+        },
+        "https://www.googleapis.com/auth/forms.body": {
+            "service": "Forms",
+            "access_type": "full_access",
+            "google_classification": "sensitive",
+            "description": "See, edit, create, and delete all of your Google Forms forms"
+        },
+        "https://www.googleapis.com/auth/forms.body.readonly": {
+            "service": "Forms",
+            "access_type": "read",
+            "google_classification": "sensitive",
+            "description": "See all your Google Forms forms"
+        },
+        "https://www.googleapis.com/auth/forms.responses.readonly": {
+            "service": "Forms",
+            "access_type": "read",
+            "google_classification": "sensitive",
+            "description": "See all responses to your Google Forms forms"
+        },
+        "https://www.googleapis.com/auth/forms.currentonly": {
+            "service": "Forms",
+            "access_type": "read_write",
+            "google_classification": "sensitive",
+            "description": "View and manage forms that this application has been installed in"
+        },
+        "https://www.googleapis.com/auth/tasks": {
+            "service": "Tasks",
+            "access_type": "full_access",
+            "google_classification": "sensitive",
+            "description": "Create, edit, organize, and delete all your tasks"
+        },
+        "https://www.googleapis.com/auth/tasks.readonly": {
+            "service": "Tasks",
+            "access_type": "read",
+            "google_classification": "sensitive",
+            "description": "View your tasks"
+        },
+        "https://www.googleapis.com/auth/keep": {
+            "service": "Keep",
+            "access_type": "full_access",
+            "google_classification": "restricted",
+            "description": "See, edit, create, and permanently delete all your Google Keep data"
+        },
+        "https://www.googleapis.com/auth/keep.readonly": {
+            "service": "Keep",
+            "access_type": "read",
+            "google_classification": "restricted",
+            "description": "View all your Google Keep data"
+        },
+        "https://www.googleapis.com/auth/youtube": {
+            "service": "YouTube",
+            "access_type": "full_access",
+            "google_classification": "sensitive",
+            "description": "Manage your YouTube account"
+        },
+        "https://www.googleapis.com/auth/youtube.readonly": {
+            "service": "YouTube",
+            "access_type": "read",
+            "google_classification": "sensitive",
+            "description": "View your YouTube account"
+        },
+        "https://www.googleapis.com/auth/youtube.upload": {
+            "service": "YouTube",
+            "access_type": "write",
+            "google_classification": "sensitive",
+            "description": "Manage your YouTube videos"
+        },
+        "https://www.googleapis.com/auth/youtube.force-ssl": {
+            "service": "YouTube",
+            "access_type": "full_access",
+            "google_classification": "sensitive",
+            "description": "See, edit, and permanently delete your YouTube videos, ratings, comments and captions"
+        },
+        "https://www.googleapis.com/auth/youtubepartner": {
+            "service": "YouTube",
+            "access_type": "full_access",
+            "google_classification": "sensitive",
+            "description": "View and manage your assets and associated content on YouTube"
+        },
+        "https://www.googleapis.com/auth/fitness.activity.read": {
+            "service": "Fitness",
+            "access_type": "read",
+            "google_classification": "sensitive",
+            "description": "Use Google Fit to see and store your physical activity data"
+        },
+        "https://www.googleapis.com/auth/fitness.activity.write": {
+            "service": "Fitness",
+            "access_type": "write",
+            "google_classification": "sensitive",
+            "description": "Add to your Google Fit physical activity data"
+        },
+        "https://www.googleapis.com/auth/fitness.blood_glucose.read": {
+            "service": "Fitness",
+            "access_type": "read",
+            "google_classification": "sensitive",
+            "description": "See info about your blood glucose in Google Fit"
+        },
+        "https://www.googleapis.com/auth/fitness.blood_pressure.read": {
+            "service": "Fitness",
+            "access_type": "read",
+            "google_classification": "sensitive",
+            "description": "See info about your blood pressure in Google Fit"
+        },
+        "https://www.googleapis.com/auth/fitness.body.read": {
+            "service": "Fitness",
+            "access_type": "read",
+            "google_classification": "sensitive",
+            "description": "See info about your body measurements in Google Fit"
+        },
+        "https://www.googleapis.com/auth/fitness.heart_rate.read": {
+            "service": "Fitness",
+            "access_type": "read",
+            "google_classification": "sensitive",
+            "description": "See your heart rate data in Google Fit"
+        },
+        "https://www.googleapis.com/auth/fitness.location.read": {
+            "service": "Fitness",
+            "access_type": "read",
+            "google_classification": "sensitive",
+            "description": "See your Google Fit speed and distance data"
+        },
+        "https://www.googleapis.com/auth/fitness.sleep.read": {
+            "service": "Fitness",
+            "access_type": "read",
+            "google_classification": "sensitive",
+            "description": "See your sleep data in Google Fit"
+        },
+        "https://www.googleapis.com/auth/photoslibrary": {
+            "service": "Photos",
+            "access_type": "full_access",
+            "google_classification": "sensitive",
+            "description": "View and manage your Google Photos library"
+        },
+        "https://www.googleapis.com/auth/photoslibrary.readonly": {
+            "service": "Photos",
+            "access_type": "read",
+            "google_classification": "sensitive",
+            "description": "View your Google Photos library"
+        },
+        "https://www.googleapis.com/auth/photoslibrary.appendonly": {
+            "service": "Photos",
+            "access_type": "write",
+            "google_classification": "sensitive",
+            "description": "Add to your Google Photos library"
+        },
+        "https://www.googleapis.com/auth/photoslibrary.readonly.appcreateddata": {
+            "service": "Photos",
+            "access_type": "read",
+            "google_classification": "non_sensitive",
+            "description": "Manage photos added by this app"
+        },
+        "https://www.googleapis.com/auth/chat.messages": {
+            "service": "Chat",
+            "access_type": "full_access",
+            "google_classification": "sensitive",
+            "description": "See, compose, send, update, and delete messages and their reactions"
+        },
+        "https://www.googleapis.com/auth/chat.messages.readonly": {
+            "service": "Chat",
+            "access_type": "read",
+            "google_classification": "sensitive",
+            "description": "See messages and their reactions in Google Chat"
+        },
+        "https://www.googleapis.com/auth/chat.spaces": {
+            "service": "Chat",
+            "access_type": "read_write",
+            "google_classification": "sensitive",
+            "description": "Create conversations and spaces and see or update metadata in Google Chat"
+        },
+        "https://www.googleapis.com/auth/chat.spaces.readonly": {
+            "service": "Chat",
+            "access_type": "read",
+            "google_classification": "sensitive",
+            "description": "View chat and spaces in Google Chat"
+        },
+        "https://www.googleapis.com/auth/chat.memberships": {
+            "service": "Chat",
+            "access_type": "read_write",
+            "google_classification": "sensitive",
+            "description": "See, add, update, and remove members from conversations and spaces in Google Chat"
+        },
+        "https://www.googleapis.com/auth/chat.delete": {
+            "service": "Chat",
+            "access_type": "write",
+            "google_classification": "sensitive",
+            "description": "Delete conversations and spaces and remove access to associated files in Google Chat"
+        },
+        "https://www.googleapis.com/auth/script.projects": {
+            "service": "Apps Script",
+            "access_type": "write",
+            "google_classification": "sensitive",
+            "description": "Create and update Google Apps Script projects"
+        },
+        "https://www.googleapis.com/auth/script.projects.readonly": {
+            "service": "Apps Script",
+            "access_type": "read",
+            "google_classification": "sensitive",
+            "description": "View Google Apps Script projects"
+        },
+        "https://www.googleapis.com/auth/script.deployments": {
+            "service": "Apps Script",
+            "access_type": "write",
+            "google_classification": "sensitive",
+            "description": "Create and update Google Apps Script deployments"
+        },
+        "https://www.googleapis.com/auth/admin.directory.user": {
+            "service": "Admin",
+            "access_type": "full_access",
+            "google_classification": "sensitive",
+            "description": "View and manage the provisioning of users on your domain"
+        },
+        "https://www.googleapis.com/auth/admin.directory.user.readonly": {
+            "service": "Admin",
+            "access_type": "read",
+            "google_classification": "sensitive",
+            "description": "See info about users on your domain"
+        },
+        "https://www.googleapis.com/auth/admin.directory.group": {
+            "service": "Admin",
+            "access_type": "full_access",
+            "google_classification": "sensitive",
+            "description": "View and manage the provisioning of groups on your domain"
+        },
+        "https://www.googleapis.com/auth/admin.directory.domain": {
+            "service": "Admin",
+            "access_type": "full_access",
+            "google_classification": "sensitive",
+            "description": "View and manage the provisioning of domains for your customers"
+        },
+        "https://www.googleapis.com/auth/admin.directory.user.security": {
+            "service": "Admin",
+            "access_type": "write",
+            "google_classification": "sensitive",
+            "description": "Manage data access permissions for users on your domain"
+        },
+        "https://www.googleapis.com/auth/admin.directory.rolemanagement": {
+            "service": "Admin",
+            "access_type": "full_access",
+            "google_classification": "sensitive",
+            "description": "Manage delegated admin roles for your domain"
+        },
+        "https://www.googleapis.com/auth/admin.reports.audit.readonly": {
+            "service": "Admin",
+            "access_type": "read",
+            "google_classification": "sensitive",
+            "description": "View audit reports for your Google Workspace domain"
+        },
+        "https://www.googleapis.com/auth/admin.datatransfer": {
+            "service": "Admin",
+            "access_type": "read_write",
+            "google_classification": "sensitive",
+            "description": "View and manage data transfers between users in your organization"
+        },
+        "https://www.googleapis.com/auth/cloud-platform": {
+            "service": "Cloud",
+            "access_type": "full_access",
+            "google_classification": "sensitive",
+            "description": "See, edit, configure, and delete your Google Cloud data and see the email address for your Google Account"
+        },
+        "https://www.googleapis.com/auth/cloud-platform.read-only": {
+            "service": "Cloud",
+            "access_type": "read",
+            "google_classification": "sensitive",
+            "description": "View your data across Google Cloud services and see the email address of your Google Account"
+        },
+        "https://www.googleapis.com/auth/devstorage.full_control": {
+            "service": "Cloud Storage",
+            "access_type": "full_access",
+            "google_classification": "sensitive",
+            "description": "Manage your data and permissions in Cloud Storage and see the email address for your Google Account"
+        },
+        "https://www.googleapis.com/auth/devstorage.read_only": {
+            "service": "Cloud Storage",
+            "access_type": "read",
+            "google_classification": "non_sensitive",
+            "description": "View your data in Google Cloud Storage"
+        },
+        "https://www.googleapis.com/auth/devstorage.read_write": {
+            "service": "Cloud Storage",
+            "access_type": "read_write",
+            "google_classification": "sensitive",
+            "description": "Manage your data in Cloud Storage and see the email address of your Google Account"
+        },
+        "https://www.googleapis.com/auth/bigquery": {
+            "service": "BigQuery",
+            "access_type": "full_access",
+            "google_classification": "sensitive",
+            "description": "View and manage your data in Google BigQuery and see the email address for your Google Account"
+        },
+        "https://www.googleapis.com/auth/bigquery.insertdata": {
+            "service": "BigQuery",
+            "access_type": "write",
+            "google_classification": "sensitive",
+            "description": "Insert data into Google BigQuery"
+        },
+        "https://www.googleapis.com/auth/compute": {
+            "service": "Compute",
+            "access_type": "full_access",
+            "google_classification": "sensitive",
+            "description": "View and manage your Google Compute Engine resources"
+        },
+        "https://www.googleapis.com/auth/compute.readonly": {
+            "service": "Compute",
+            "access_type": "read",
+            "google_classification": "sensitive",
+            "description": "View your Google Compute Engine resources"
+        },
+        "https://www.googleapis.com/auth/blogger": {
+            "service": "Blogger",
+            "access_type": "full_access",
+            "google_classification": "sensitive",
+            "description": "Manage your Blogger account"
+        },
+        "https://www.googleapis.com/auth/blogger.readonly": {
+            "service": "Blogger",
+            "access_type": "read",
+            "google_classification": "sensitive",
+            "description": "View your Blogger account"
+        },
+        "https://www.googleapis.com/auth/analytics": {
+            "service": "Analytics",
+            "access_type": "full_access",
+            "google_classification": "sensitive",
+            "description": "View and manage your Google Analytics data"
+        },
+        "https://www.googleapis.com/auth/analytics.readonly": {
+            "service": "Analytics",
+            "access_type": "read",
+            "google_classification": "non_sensitive",
+            "description": "View your Google Analytics data"
+        },
+        "https://www.googleapis.com/auth/analytics.edit": {
+            "service": "Analytics",
+            "access_type": "write",
+            "google_classification": "sensitive",
+            "description": "Edit Google Analytics management entities"
+        },
+        "https://www.googleapis.com/auth/analytics.manage.users": {
+            "service": "Analytics",
+            "access_type": "write",
+            "google_classification": "sensitive",
+            "description": "Manage Google Analytics Account users by email address"
+        },
+        "https://www.googleapis.com/auth/adsense": {
+            "service": "AdSense",
+            "access_type": "full_access",
+            "google_classification": "sensitive",
+            "description": "View and manage your AdSense data"
+        },
+        "https://www.googleapis.com/auth/adsense.readonly": {
+            "service": "AdSense",
+            "access_type": "read",
+            "google_classification": "non_sensitive",
+            "description": "View your AdSense data"
+        },
+        "https://www.googleapis.com/auth/groups": {
+            "service": "Groups",
+            "access_type": "full_access",
+            "google_classification": "sensitive",
+            "description": "View and manage your Google Groups"
+        },
+        "https://www.googleapis.com/auth/firebase": {
+            "service": "Firebase",
+            "access_type": "full_access",
+            "google_classification": "sensitive",
+            "description": "View and administer all your Firebase data and settings"
+        },
+        "https://www.googleapis.com/auth/firebase.readonly": {
+            "service": "Firebase",
+            "access_type": "read",
+            "google_classification": "sensitive",
+            "description": "View all your Firebase data and settings"
+        },
+        "https://www.googleapis.com/auth/firebase.messaging": {
+            "service": "Firebase",
+            "access_type": "write",
+            "google_classification": "sensitive",
+            "description": "Send messages and manage messaging subscriptions for your Firebase applications"
+        },
+        "https://www.googleapis.com/auth/classroom.courses": {
+            "service": "Classroom",
+            "access_type": "full_access",
+            "google_classification": "sensitive",
+            "description": "See, edit, create, and delete your Google Classroom classes"
+        },
+        "https://www.googleapis.com/auth/classroom.courses.readonly": {
+            "service": "Classroom",
+            "access_type": "read",
+            "google_classification": "sensitive",
+            "description": "View your Google Classroom classes"
+        },
+        "https://www.googleapis.com/auth/classroom.rosters": {
+            "service": "Classroom",
+            "access_type": "read_write",
+            "google_classification": "sensitive",
+            "description": "Manage your Google Classroom class rosters"
+        },
+        "https://www.googleapis.com/auth/classroom.profile.emails": {
+            "service": "Classroom",
+            "access_type": "read",
+            "google_classification": "sensitive",
+            "description": "View the email addresses of people in your classes"
+        },
+        "https://www.googleapis.com/auth/classroom.coursework.students": {
+            "service": "Classroom",
+            "access_type": "read_write",
+            "google_classification": "sensitive",
+            "description": "Manage course work and grades for students in your Google Classroom classes"
+        }
+    },
+    "ADMIN_SCOPES": [
+        "https://www.googleapis.com/auth/admin.directory.user",
+        "https://www.googleapis.com/auth/admin.directory.user.security",
+        "https://www.googleapis.com/auth/admin.directory.domain",
+        "https://www.googleapis.com/auth/admin.directory.rolemanagement",
+        "https://www.googleapis.com/auth/admin.datatransfer",
+        "https://www.googleapis.com/auth/admin.directory.group",
+        "https://www.googleapis.com/auth/cloud-platform",
+        "https://www.googleapis.com/auth/analytics.manage.users"
+    ],
+    "TRANSITIVE_SCOPES": [
+        "https://www.googleapis.com/auth/admin.directory.user",
+        "https://www.googleapis.com/auth/admin.directory.user.readonly",
+        "https://www.googleapis.com/auth/admin.directory.group",
+        "https://www.googleapis.com/auth/admin.directory.group.member",
+        "https://www.googleapis.com/auth/admin.directory.domain",
+        "https://www.googleapis.com/auth/admin.datatransfer",
+        "https://www.googleapis.com/auth/admin.directory.rolemanagement",
+        "https://www.googleapis.com/auth/directory.readonly",
+        "https://www.googleapis.com/auth/cloud-platform",
+        "https://www.googleapis.com/auth/classroom.rosters",
+        "https://www.googleapis.com/auth/classroom.profile.emails",
+        "https://www.googleapis.com/auth/chat.admin.memberships",
+        "https://www.googleapis.com/auth/chat.admin.spaces",
+        "https://www.googleapis.com/auth/contacts",
+        "https://www.googleapis.com/auth/contacts.readonly"
+    ]
+}

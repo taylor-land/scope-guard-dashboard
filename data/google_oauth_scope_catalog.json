@@ -1,0 +1,1486 @@
+{
+  "metadata": {
+    "title": "Google OAuth 2.0 Scope Registry",
+    "source": "https://developers.google.com/identity/protocols/oauth2/scopes",
+    "date_compiled": "2026-06-05",
+    "total_scopes": 131,
+    "total_services": 27,
+    "notes": "This catalog covers the most security-relevant user-facing Google OAuth scopes. Google's full registry contains 900+ scopes across all Cloud and Workspace APIs. The google_classification field indicates Google's own sensitivity tier (non_sensitive, sensitive, or restricted). Restricted scopes require additional verification. The access_type field indicates the level of access granted (read, write, read_write, full_access)."
+  },
+  "services_summary": {
+    "AdSense": {
+      "scope_count": 2,
+      "classifications": [
+        "non_sensitive",
+        "sensitive"
+      ],
+      "access_types": [
+        "full_access",
+        "read"
+      ]
+    },
+    "Admin": {
+      "scope_count": 8,
+      "classifications": [
+        "sensitive"
+      ],
+      "access_types": [
+        "full_access",
+        "read",
+        "read_write",
+        "write"
+      ]
+    },
+    "Analytics": {
+      "scope_count": 4,
+      "classifications": [
+        "non_sensitive",
+        "sensitive"
+      ],
+      "access_types": [
+        "full_access",
+        "read",
+        "write"
+      ]
+    },
+    "Apps Script": {
+      "scope_count": 3,
+      "classifications": [
+        "sensitive"
+      ],
+      "access_types": [
+        "read",
+        "write"
+      ]
+    },
+    "BigQuery": {
+      "scope_count": 2,
+      "classifications": [
+        "sensitive"
+      ],
+      "access_types": [
+        "full_access",
+        "write"
+      ]
+    },
+    "Blogger": {
+      "scope_count": 2,
+      "classifications": [
+        "sensitive"
+      ],
+      "access_types": [
+        "full_access",
+        "read"
+      ]
+    },
+    "Calendar": {
+      "scope_count": 17,
+      "classifications": [
+        "non_sensitive",
+        "sensitive"
+      ],
+      "access_types": [
+        "full_access",
+        "read",
+        "read_write"
+      ]
+    },
+    "Chat": {
+      "scope_count": 6,
+      "classifications": [
+        "sensitive"
+      ],
+      "access_types": [
+        "full_access",
+        "read",
+        "read_write",
+        "write"
+      ]
+    },
+    "Classroom": {
+      "scope_count": 5,
+      "classifications": [
+        "sensitive"
+      ],
+      "access_types": [
+        "full_access",
+        "read",
+        "read_write"
+      ]
+    },
+    "Cloud": {
+      "scope_count": 2,
+      "classifications": [
+        "sensitive"
+      ],
+      "access_types": [
+        "full_access",
+        "read"
+      ]
+    },
+    "Cloud Storage": {
+      "scope_count": 3,
+      "classifications": [
+        "non_sensitive",
+        "sensitive"
+      ],
+      "access_types": [
+        "full_access",
+        "read",
+        "read_write"
+      ]
+    },
+    "Compute": {
+      "scope_count": 2,
+      "classifications": [
+        "sensitive"
+      ],
+      "access_types": [
+        "full_access",
+        "read"
+      ]
+    },
+    "Contacts": {
+      "scope_count": 10,
+      "classifications": [
+        "restricted",
+        "sensitive"
+      ],
+      "access_types": [
+        "full_access",
+        "read"
+      ]
+    },
+    "Docs": {
+      "scope_count": 2,
+      "classifications": [
+        "sensitive"
+      ],
+      "access_types": [
+        "full_access",
+        "read"
+      ]
+    },
+    "Drive": {
+      "scope_count": 10,
+      "classifications": [
+        "non_sensitive",
+        "restricted",
+        "sensitive"
+      ],
+      "access_types": [
+        "full_access",
+        "read",
+        "read_write",
+        "write"
+      ]
+    },
+    "Firebase": {
+      "scope_count": 3,
+      "classifications": [
+        "sensitive"
+      ],
+      "access_types": [
+        "full_access",
+        "read",
+        "write"
+      ]
+    },
+    "Fitness": {
+      "scope_count": 8,
+      "classifications": [
+        "sensitive"
+      ],
+      "access_types": [
+        "read",
+        "write"
+      ]
+    },
+    "Forms": {
+      "scope_count": 5,
+      "classifications": [
+        "sensitive"
+      ],
+      "access_types": [
+        "full_access",
+        "read",
+        "read_write"
+      ]
+    },
+    "Gmail": {
+      "scope_count": 14,
+      "classifications": [
+        "restricted",
+        "sensitive"
+      ],
+      "access_types": [
+        "full_access",
+        "read",
+        "read_write",
+        "write"
+      ]
+    },
+    "Groups": {
+      "scope_count": 1,
+      "classifications": [
+        "sensitive"
+      ],
+      "access_types": [
+        "full_access"
+      ]
+    },
+    "Identity": {
+      "scope_count": 5,
+      "classifications": [
+        "non_sensitive"
+      ],
+      "access_types": [
+        "read"
+      ]
+    },
+    "Keep": {
+      "scope_count": 2,
+      "classifications": [
+        "restricted"
+      ],
+      "access_types": [
+        "full_access",
+        "read"
+      ]
+    },
+    "Photos": {
+      "scope_count": 4,
+      "classifications": [
+        "non_sensitive",
+        "sensitive"
+      ],
+      "access_types": [
+        "full_access",
+        "read",
+        "write"
+      ]
+    },
+    "Sheets": {
+      "scope_count": 2,
+      "classifications": [
+        "sensitive"
+      ],
+      "access_types": [
+        "full_access",
+        "read"
+      ]
+    },
+    "Slides": {
+      "scope_count": 2,
+      "classifications": [
+        "sensitive"
+      ],
+      "access_types": [
+        "full_access",
+        "read"
+      ]
+    },
+    "Tasks": {
+      "scope_count": 2,
+      "classifications": [
+        "sensitive"
+      ],
+      "access_types": [
+        "full_access",
+        "read"
+      ]
+    },
+    "YouTube": {
+      "scope_count": 5,
+      "classifications": [
+        "sensitive"
+      ],
+      "access_types": [
+        "full_access",
+        "read",
+        "write"
+      ]
+    }
+  },
+  "scopes": [
+    {
+      "scope": "https://mail.google.com/",
+      "api": "Gmail API",
+      "api_version": "v1",
+      "description": "Read, compose, send, and permanently delete all your email from Gmail",
+      "service": "Gmail",
+      "access_type": "full_access",
+      "google_classification": "restricted"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/gmail.addons.current.action.compose",
+      "api": "Gmail API",
+      "api_version": "v1",
+      "description": "Manage drafts and send emails when you interact with the add-on",
+      "service": "Gmail",
+      "access_type": "write",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/gmail.addons.current.message.action",
+      "api": "Gmail API",
+      "api_version": "v1",
+      "description": "View your email messages when you interact with the add-on",
+      "service": "Gmail",
+      "access_type": "read",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/gmail.addons.current.message.metadata",
+      "api": "Gmail API",
+      "api_version": "v1",
+      "description": "View your email message metadata when the add-on is running",
+      "service": "Gmail",
+      "access_type": "read",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/gmail.addons.current.message.readonly",
+      "api": "Gmail API",
+      "api_version": "v1",
+      "description": "View your email messages when the add-on is running",
+      "service": "Gmail",
+      "access_type": "read",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/gmail.compose",
+      "api": "Gmail API",
+      "api_version": "v1",
+      "description": "Manage drafts and send emails",
+      "service": "Gmail",
+      "access_type": "write",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/gmail.insert",
+      "api": "Gmail API",
+      "api_version": "v1",
+      "description": "Add emails into your Gmail mailbox",
+      "service": "Gmail",
+      "access_type": "write",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/gmail.labels",
+      "api": "Gmail API",
+      "api_version": "v1",
+      "description": "See and edit your email labels",
+      "service": "Gmail",
+      "access_type": "read_write",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/gmail.metadata",
+      "api": "Gmail API",
+      "api_version": "v1",
+      "description": "View your email message metadata such as labels and headers, but not the email body",
+      "service": "Gmail",
+      "access_type": "read",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/gmail.modify",
+      "api": "Gmail API",
+      "api_version": "v1",
+      "description": "Read, compose, and send emails from your Gmail account",
+      "service": "Gmail",
+      "access_type": "read_write",
+      "google_classification": "restricted"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/gmail.readonly",
+      "api": "Gmail API",
+      "api_version": "v1",
+      "description": "View your email messages and settings",
+      "service": "Gmail",
+      "access_type": "read",
+      "google_classification": "restricted"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/gmail.send",
+      "api": "Gmail API",
+      "api_version": "v1",
+      "description": "Send email on your behalf",
+      "service": "Gmail",
+      "access_type": "write",
+      "google_classification": "restricted"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/gmail.settings.basic",
+      "api": "Gmail API",
+      "api_version": "v1",
+      "description": "See, edit, create, or change your email settings and filters in Gmail",
+      "service": "Gmail",
+      "access_type": "read_write",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/gmail.settings.sharing",
+      "api": "Gmail API",
+      "api_version": "v1",
+      "description": "Manage your sensitive mail settings, including who can manage your mail",
+      "service": "Gmail",
+      "access_type": "write",
+      "google_classification": "restricted"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/drive",
+      "api": "Google Drive API",
+      "api_version": "v3",
+      "description": "See, edit, create, and delete all of your Google Drive files",
+      "service": "Drive",
+      "access_type": "full_access",
+      "google_classification": "restricted"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/drive.appdata",
+      "api": "Google Drive API",
+      "api_version": "v3",
+      "description": "See, create, and delete its own configuration data in your Google Drive",
+      "service": "Drive",
+      "access_type": "read_write",
+      "google_classification": "non_sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/drive.file",
+      "api": "Google Drive API",
+      "api_version": "v3",
+      "description": "See, edit, create, and delete only the specific Google Drive files you use with this app",
+      "service": "Drive",
+      "access_type": "read_write",
+      "google_classification": "non_sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/drive.metadata",
+      "api": "Google Drive API",
+      "api_version": "v3",
+      "description": "View and manage metadata of files in your Google Drive",
+      "service": "Drive",
+      "access_type": "read_write",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/drive.metadata.readonly",
+      "api": "Google Drive API",
+      "api_version": "v3",
+      "description": "See information about your Google Drive files",
+      "service": "Drive",
+      "access_type": "read",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/drive.photos.readonly",
+      "api": "Google Drive API",
+      "api_version": "v3",
+      "description": "View the photos, videos and albums in your Google Photos",
+      "service": "Drive",
+      "access_type": "read",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/drive.readonly",
+      "api": "Google Drive API",
+      "api_version": "v3",
+      "description": "See and download all your Google Drive files",
+      "service": "Drive",
+      "access_type": "read",
+      "google_classification": "restricted"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/drive.scripts",
+      "api": "Google Drive API",
+      "api_version": "v3",
+      "description": "Modify your Google Apps Script scripts' behavior",
+      "service": "Drive",
+      "access_type": "write",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/drive.activity",
+      "api": "Drive Activity API",
+      "api_version": "v2",
+      "description": "View and add to the activity record of files in your Google Drive",
+      "service": "Drive",
+      "access_type": "read_write",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/drive.activity.readonly",
+      "api": "Drive Activity API",
+      "api_version": "v2",
+      "description": "View the activity record of files in your Google Drive",
+      "service": "Drive",
+      "access_type": "read",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/calendar",
+      "api": "Calendar API",
+      "api_version": "v3",
+      "description": "See, edit, share, and permanently delete all the calendars you can access using Google Calendar",
+      "service": "Calendar",
+      "access_type": "full_access",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/calendar.acls",
+      "api": "Calendar API",
+      "api_version": "v3",
+      "description": "See and change the sharing permissions of Google calendars you own",
+      "service": "Calendar",
+      "access_type": "read_write",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/calendar.acls.readonly",
+      "api": "Calendar API",
+      "api_version": "v3",
+      "description": "See the sharing permissions of Google calendars you own",
+      "service": "Calendar",
+      "access_type": "read",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/calendar.app.created",
+      "api": "Calendar API",
+      "api_version": "v3",
+      "description": "Make secondary Google calendars, and see, create, change, and delete events on them",
+      "service": "Calendar",
+      "access_type": "read_write",
+      "google_classification": "non_sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/calendar.calendarlist",
+      "api": "Calendar API",
+      "api_version": "v3",
+      "description": "See, add, and remove Google calendars you're subscribed to",
+      "service": "Calendar",
+      "access_type": "read_write",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/calendar.calendarlist.readonly",
+      "api": "Calendar API",
+      "api_version": "v3",
+      "description": "See the list of Google calendars you're subscribed to",
+      "service": "Calendar",
+      "access_type": "read",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/calendar.calendars",
+      "api": "Calendar API",
+      "api_version": "v3",
+      "description": "See and change the properties of Google calendars you have access to, and create secondary calendars",
+      "service": "Calendar",
+      "access_type": "read_write",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/calendar.calendars.readonly",
+      "api": "Calendar API",
+      "api_version": "v3",
+      "description": "See the title, description, default time zone, and other properties of Google calendars you have access to",
+      "service": "Calendar",
+      "access_type": "read",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/calendar.events",
+      "api": "Calendar API",
+      "api_version": "v3",
+      "description": "View and edit events on all your calendars",
+      "service": "Calendar",
+      "access_type": "read_write",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/calendar.events.freebusy",
+      "api": "Calendar API",
+      "api_version": "v3",
+      "description": "See the availability on Google calendars you have access to",
+      "service": "Calendar",
+      "access_type": "read",
+      "google_classification": "non_sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/calendar.events.owned",
+      "api": "Calendar API",
+      "api_version": "v3",
+      "description": "See, create, change, and delete events on Google calendars you own",
+      "service": "Calendar",
+      "access_type": "read_write",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/calendar.events.owned.readonly",
+      "api": "Calendar API",
+      "api_version": "v3",
+      "description": "See the events on Google calendars you own",
+      "service": "Calendar",
+      "access_type": "read",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/calendar.events.public.readonly",
+      "api": "Calendar API",
+      "api_version": "v3",
+      "description": "See the events on public calendars",
+      "service": "Calendar",
+      "access_type": "read",
+      "google_classification": "non_sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/calendar.events.readonly",
+      "api": "Calendar API",
+      "api_version": "v3",
+      "description": "View events on all your calendars",
+      "service": "Calendar",
+      "access_type": "read",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/calendar.freebusy",
+      "api": "Calendar API",
+      "api_version": "v3",
+      "description": "View your availability in your calendars",
+      "service": "Calendar",
+      "access_type": "read",
+      "google_classification": "non_sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/calendar.readonly",
+      "api": "Calendar API",
+      "api_version": "v3",
+      "description": "See and download any calendar you can access using your Google Calendar",
+      "service": "Calendar",
+      "access_type": "read",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/calendar.settings.readonly",
+      "api": "Calendar API",
+      "api_version": "v3",
+      "description": "View your Calendar settings",
+      "service": "Calendar",
+      "access_type": "read",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/contacts",
+      "api": "People API",
+      "api_version": "v1",
+      "description": "See, edit, download, and permanently delete your contacts",
+      "service": "Contacts",
+      "access_type": "full_access",
+      "google_classification": "restricted"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/contacts.readonly",
+      "api": "People API",
+      "api_version": "v1",
+      "description": "See and download your contacts",
+      "service": "Contacts",
+      "access_type": "read",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/contacts.other.readonly",
+      "api": "People API",
+      "api_version": "v1",
+      "description": "See and download contact info automatically saved in your 'Other contacts'",
+      "service": "Contacts",
+      "access_type": "read",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/directory.readonly",
+      "api": "People API",
+      "api_version": "v1",
+      "description": "See and download your organization's GSuite directory",
+      "service": "Contacts",
+      "access_type": "read",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/user.addresses.read",
+      "api": "People API",
+      "api_version": "v1",
+      "description": "View your street addresses",
+      "service": "Contacts",
+      "access_type": "read",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/user.birthday.read",
+      "api": "People API",
+      "api_version": "v1",
+      "description": "See and download your exact date of birth",
+      "service": "Contacts",
+      "access_type": "read",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/user.emails.read",
+      "api": "People API",
+      "api_version": "v1",
+      "description": "See and download all email addresses associated with your Google Account",
+      "service": "Contacts",
+      "access_type": "read",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/user.gender.read",
+      "api": "People API",
+      "api_version": "v1",
+      "description": "See your gender",
+      "service": "Contacts",
+      "access_type": "read",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/user.organization.read",
+      "api": "People API",
+      "api_version": "v1",
+      "description": "See your education, work history and org info",
+      "service": "Contacts",
+      "access_type": "read",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/user.phonenumbers.read",
+      "api": "People API",
+      "api_version": "v1",
+      "description": "See and download your personal phone numbers",
+      "service": "Contacts",
+      "access_type": "read",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/userinfo.email",
+      "api": "People API",
+      "api_version": "v1",
+      "description": "See your primary Google Account email address",
+      "service": "Identity",
+      "access_type": "read",
+      "google_classification": "non_sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/userinfo.profile",
+      "api": "People API",
+      "api_version": "v1",
+      "description": "See your personal info, including any personal info you've made publicly available",
+      "service": "Identity",
+      "access_type": "read",
+      "google_classification": "non_sensitive"
+    },
+    {
+      "scope": "openid",
+      "api": "OpenID Connect",
+      "api_version": "v1",
+      "description": "Authenticate using OpenID Connect",
+      "service": "Identity",
+      "access_type": "read",
+      "google_classification": "non_sensitive"
+    },
+    {
+      "scope": "profile",
+      "api": "OpenID Connect",
+      "api_version": "v1",
+      "description": "View basic profile info",
+      "service": "Identity",
+      "access_type": "read",
+      "google_classification": "non_sensitive"
+    },
+    {
+      "scope": "email",
+      "api": "OpenID Connect",
+      "api_version": "v1",
+      "description": "View email address",
+      "service": "Identity",
+      "access_type": "read",
+      "google_classification": "non_sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/documents",
+      "api": "Google Docs API",
+      "api_version": "v1",
+      "description": "See, edit, create, and delete all your Google Docs documents",
+      "service": "Docs",
+      "access_type": "full_access",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/documents.readonly",
+      "api": "Google Docs API",
+      "api_version": "v1",
+      "description": "See all your Google Docs documents",
+      "service": "Docs",
+      "access_type": "read",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/spreadsheets",
+      "api": "Google Sheets API",
+      "api_version": "v4",
+      "description": "See, edit, create, and delete all your Google Sheets spreadsheets",
+      "service": "Sheets",
+      "access_type": "full_access",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/spreadsheets.readonly",
+      "api": "Google Sheets API",
+      "api_version": "v4",
+      "description": "See all your Google Sheets spreadsheets",
+      "service": "Sheets",
+      "access_type": "read",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/presentations",
+      "api": "Google Slides API",
+      "api_version": "v1",
+      "description": "See, edit, create, and delete all your Google Slides presentations",
+      "service": "Slides",
+      "access_type": "full_access",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/presentations.readonly",
+      "api": "Google Slides API",
+      "api_version": "v1",
+      "description": "See all your Google Slides presentations",
+      "service": "Slides",
+      "access_type": "read",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/forms",
+      "api": "Google Forms API",
+      "api_version": "v1",
+      "description": "View and manage your forms in Google Drive",
+      "service": "Forms",
+      "access_type": "read_write",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/forms.body",
+      "api": "Google Forms API",
+      "api_version": "v1",
+      "description": "See, edit, create, and delete all of your Google Forms forms",
+      "service": "Forms",
+      "access_type": "full_access",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/forms.body.readonly",
+      "api": "Google Forms API",
+      "api_version": "v1",
+      "description": "See all your Google Forms forms",
+      "service": "Forms",
+      "access_type": "read",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/forms.responses.readonly",
+      "api": "Google Forms API",
+      "api_version": "v1",
+      "description": "See all responses to your Google Forms forms",
+      "service": "Forms",
+      "access_type": "read",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/forms.currentonly",
+      "api": "Apps Script API",
+      "api_version": "v1",
+      "description": "View and manage forms that this application has been installed in",
+      "service": "Forms",
+      "access_type": "read_write",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/tasks",
+      "api": "Google Tasks API",
+      "api_version": "v1",
+      "description": "Create, edit, organize, and delete all your tasks",
+      "service": "Tasks",
+      "access_type": "full_access",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/tasks.readonly",
+      "api": "Google Tasks API",
+      "api_version": "v1",
+      "description": "View your tasks",
+      "service": "Tasks",
+      "access_type": "read",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/keep",
+      "api": "Google Keep API",
+      "api_version": "v1",
+      "description": "See, edit, create, and permanently delete all your Google Keep data",
+      "service": "Keep",
+      "access_type": "full_access",
+      "google_classification": "restricted"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/keep.readonly",
+      "api": "Google Keep API",
+      "api_version": "v1",
+      "description": "View all your Google Keep data",
+      "service": "Keep",
+      "access_type": "read",
+      "google_classification": "restricted"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/youtube",
+      "api": "YouTube Data API",
+      "api_version": "v3",
+      "description": "Manage your YouTube account",
+      "service": "YouTube",
+      "access_type": "full_access",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/youtube.readonly",
+      "api": "YouTube Data API",
+      "api_version": "v3",
+      "description": "View your YouTube account",
+      "service": "YouTube",
+      "access_type": "read",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/youtube.upload",
+      "api": "YouTube Data API",
+      "api_version": "v3",
+      "description": "Manage your YouTube videos",
+      "service": "YouTube",
+      "access_type": "write",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/youtube.force-ssl",
+      "api": "YouTube Data API",
+      "api_version": "v3",
+      "description": "See, edit, and permanently delete your YouTube videos, ratings, comments and captions",
+      "service": "YouTube",
+      "access_type": "full_access",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/youtubepartner",
+      "api": "YouTube Data API",
+      "api_version": "v3",
+      "description": "View and manage your assets and associated content on YouTube",
+      "service": "YouTube",
+      "access_type": "full_access",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/fitness.activity.read",
+      "api": "Fitness API",
+      "api_version": "v1",
+      "description": "Use Google Fit to see and store your physical activity data",
+      "service": "Fitness",
+      "access_type": "read",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/fitness.activity.write",
+      "api": "Fitness API",
+      "api_version": "v1",
+      "description": "Add to your Google Fit physical activity data",
+      "service": "Fitness",
+      "access_type": "write",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/fitness.blood_glucose.read",
+      "api": "Fitness API",
+      "api_version": "v1",
+      "description": "See info about your blood glucose in Google Fit",
+      "service": "Fitness",
+      "access_type": "read",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/fitness.blood_pressure.read",
+      "api": "Fitness API",
+      "api_version": "v1",
+      "description": "See info about your blood pressure in Google Fit",
+      "service": "Fitness",
+      "access_type": "read",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/fitness.body.read",
+      "api": "Fitness API",
+      "api_version": "v1",
+      "description": "See info about your body measurements in Google Fit",
+      "service": "Fitness",
+      "access_type": "read",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/fitness.heart_rate.read",
+      "api": "Fitness API",
+      "api_version": "v1",
+      "description": "See your heart rate data in Google Fit",
+      "service": "Fitness",
+      "access_type": "read",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/fitness.location.read",
+      "api": "Fitness API",
+      "api_version": "v1",
+      "description": "See your Google Fit speed and distance data",
+      "service": "Fitness",
+      "access_type": "read",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/fitness.sleep.read",
+      "api": "Fitness API",
+      "api_version": "v1",
+      "description": "See your sleep data in Google Fit",
+      "service": "Fitness",
+      "access_type": "read",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/photoslibrary",
+      "api": "Photos Library API",
+      "api_version": "v1",
+      "description": "View and manage your Google Photos library",
+      "service": "Photos",
+      "access_type": "full_access",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/photoslibrary.readonly",
+      "api": "Photos Library API",
+      "api_version": "v1",
+      "description": "View your Google Photos library",
+      "service": "Photos",
+      "access_type": "read",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/photoslibrary.appendonly",
+      "api": "Photos Library API",
+      "api_version": "v1",
+      "description": "Add to your Google Photos library",
+      "service": "Photos",
+      "access_type": "write",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/photoslibrary.readonly.appcreateddata",
+      "api": "Photos Library API",
+      "api_version": "v1",
+      "description": "Manage photos added by this app",
+      "service": "Photos",
+      "access_type": "read",
+      "google_classification": "non_sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/chat.messages",
+      "api": "Google Chat API",
+      "api_version": "v1",
+      "description": "See, compose, send, update, and delete messages and their reactions",
+      "service": "Chat",
+      "access_type": "full_access",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/chat.messages.readonly",
+      "api": "Google Chat API",
+      "api_version": "v1",
+      "description": "See messages and their reactions in Google Chat",
+      "service": "Chat",
+      "access_type": "read",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/chat.spaces",
+      "api": "Google Chat API",
+      "api_version": "v1",
+      "description": "Create conversations and spaces and see or update metadata in Google Chat",
+      "service": "Chat",
+      "access_type": "read_write",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/chat.spaces.readonly",
+      "api": "Google Chat API",
+      "api_version": "v1",
+      "description": "View chat and spaces in Google Chat",
+      "service": "Chat",
+      "access_type": "read",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/chat.memberships",
+      "api": "Google Chat API",
+      "api_version": "v1",
+      "description": "See, add, update, and remove members from conversations and spaces in Google Chat",
+      "service": "Chat",
+      "access_type": "read_write",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/chat.delete",
+      "api": "Google Chat API",
+      "api_version": "v1",
+      "description": "Delete conversations and spaces and remove access to associated files in Google Chat",
+      "service": "Chat",
+      "access_type": "write",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/script.projects",
+      "api": "Apps Script API",
+      "api_version": "v1",
+      "description": "Create and update Google Apps Script projects",
+      "service": "Apps Script",
+      "access_type": "write",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/script.projects.readonly",
+      "api": "Apps Script API",
+      "api_version": "v1",
+      "description": "View Google Apps Script projects",
+      "service": "Apps Script",
+      "access_type": "read",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/script.deployments",
+      "api": "Apps Script API",
+      "api_version": "v1",
+      "description": "Create and update Google Apps Script deployments",
+      "service": "Apps Script",
+      "access_type": "write",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/admin.directory.user",
+      "api": "Admin SDK API",
+      "api_version": "v1",
+      "description": "View and manage the provisioning of users on your domain",
+      "service": "Admin",
+      "access_type": "full_access",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/admin.directory.user.readonly",
+      "api": "Admin SDK API",
+      "api_version": "v1",
+      "description": "See info about users on your domain",
+      "service": "Admin",
+      "access_type": "read",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/admin.directory.group",
+      "api": "Admin SDK API",
+      "api_version": "v1",
+      "description": "View and manage the provisioning of groups on your domain",
+      "service": "Admin",
+      "access_type": "full_access",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/admin.directory.domain",
+      "api": "Admin SDK API",
+      "api_version": "v1",
+      "description": "View and manage the provisioning of domains for your customers",
+      "service": "Admin",
+      "access_type": "full_access",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/admin.directory.user.security",
+      "api": "Admin SDK API",
+      "api_version": "v1",
+      "description": "Manage data access permissions for users on your domain",
+      "service": "Admin",
+      "access_type": "write",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/admin.directory.rolemanagement",
+      "api": "Admin SDK API",
+      "api_version": "v1",
+      "description": "Manage delegated admin roles for your domain",
+      "service": "Admin",
+      "access_type": "full_access",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/admin.reports.audit.readonly",
+      "api": "Admin SDK API",
+      "api_version": "v1",
+      "description": "View audit reports for your Google Workspace domain",
+      "service": "Admin",
+      "access_type": "read",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/admin.datatransfer",
+      "api": "Admin SDK API",
+      "api_version": "v1",
+      "description": "View and manage data transfers between users in your organization",
+      "service": "Admin",
+      "access_type": "read_write",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/cloud-platform",
+      "api": "Cloud Platform",
+      "api_version": "v1",
+      "description": "See, edit, configure, and delete your Google Cloud data and see the email address for your Google Account",
+      "service": "Cloud",
+      "access_type": "full_access",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/cloud-platform.read-only",
+      "api": "Cloud Platform",
+      "api_version": "v1",
+      "description": "View your data across Google Cloud services and see the email address of your Google Account",
+      "service": "Cloud",
+      "access_type": "read",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/devstorage.full_control",
+      "api": "Cloud Storage JSON API",
+      "api_version": "v1",
+      "description": "Manage your data and permissions in Cloud Storage and see the email address for your Google Account",
+      "service": "Cloud Storage",
+      "access_type": "full_access",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/devstorage.read_only",
+      "api": "Cloud Storage JSON API",
+      "api_version": "v1",
+      "description": "View your data in Google Cloud Storage",
+      "service": "Cloud Storage",
+      "access_type": "read",
+      "google_classification": "non_sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/devstorage.read_write",
+      "api": "Cloud Storage JSON API",
+      "api_version": "v1",
+      "description": "Manage your data in Cloud Storage and see the email address of your Google Account",
+      "service": "Cloud Storage",
+      "access_type": "read_write",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/bigquery",
+      "api": "BigQuery API",
+      "api_version": "v2",
+      "description": "View and manage your data in Google BigQuery and see the email address for your Google Account",
+      "service": "BigQuery",
+      "access_type": "full_access",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/bigquery.insertdata",
+      "api": "BigQuery API",
+      "api_version": "v2",
+      "description": "Insert data into Google BigQuery",
+      "service": "BigQuery",
+      "access_type": "write",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/compute",
+      "api": "Compute Engine API",
+      "api_version": "v1",
+      "description": "View and manage your Google Compute Engine resources",
+      "service": "Compute",
+      "access_type": "full_access",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/compute.readonly",
+      "api": "Compute Engine API",
+      "api_version": "v1",
+      "description": "View your Google Compute Engine resources",
+      "service": "Compute",
+      "access_type": "read",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/blogger",
+      "api": "Blogger API",
+      "api_version": "v3",
+      "description": "Manage your Blogger account",
+      "service": "Blogger",
+      "access_type": "full_access",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/blogger.readonly",
+      "api": "Blogger API",
+      "api_version": "v3",
+      "description": "View your Blogger account",
+      "service": "Blogger",
+      "access_type": "read",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/analytics",
+      "api": "Google Analytics API",
+      "api_version": "v3",
+      "description": "View and manage your Google Analytics data",
+      "service": "Analytics",
+      "access_type": "full_access",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/analytics.readonly",
+      "api": "Google Analytics API",
+      "api_version": "v3",
+      "description": "View your Google Analytics data",
+      "service": "Analytics",
+      "access_type": "read",
+      "google_classification": "non_sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/analytics.edit",
+      "api": "Google Analytics API",
+      "api_version": "v3",
+      "description": "Edit Google Analytics management entities",
+      "service": "Analytics",
+      "access_type": "write",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/analytics.manage.users",
+      "api": "Google Analytics API",
+      "api_version": "v3",
+      "description": "Manage Google Analytics Account users by email address",
+      "service": "Analytics",
+      "access_type": "write",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/adsense",
+      "api": "AdSense Management API",
+      "api_version": "v2",
+      "description": "View and manage your AdSense data",
+      "service": "AdSense",
+      "access_type": "full_access",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/adsense.readonly",
+      "api": "AdSense Management API",
+      "api_version": "v2",
+      "description": "View your AdSense data",
+      "service": "AdSense",
+      "access_type": "read",
+      "google_classification": "non_sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/groups",
+      "api": "Apps Script API",
+      "api_version": "v1",
+      "description": "View and manage your Google Groups",
+      "service": "Groups",
+      "access_type": "full_access",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/firebase",
+      "api": "Firebase Management API",
+      "api_version": "v1beta1",
+      "description": "View and administer all your Firebase data and settings",
+      "service": "Firebase",
+      "access_type": "full_access",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/firebase.readonly",
+      "api": "Firebase Management API",
+      "api_version": "v1beta1",
+      "description": "View all your Firebase data and settings",
+      "service": "Firebase",
+      "access_type": "read",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/firebase.messaging",
+      "api": "Firebase Cloud Messaging API",
+      "api_version": "v1",
+      "description": "Send messages and manage messaging subscriptions for your Firebase applications",
+      "service": "Firebase",
+      "access_type": "write",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/classroom.courses",
+      "api": "Classroom API",
+      "api_version": "v1",
+      "description": "See, edit, create, and delete your Google Classroom classes",
+      "service": "Classroom",
+      "access_type": "full_access",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/classroom.courses.readonly",
+      "api": "Classroom API",
+      "api_version": "v1",
+      "description": "View your Google Classroom classes",
+      "service": "Classroom",
+      "access_type": "read",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/classroom.rosters",
+      "api": "Classroom API",
+      "api_version": "v1",
+      "description": "Manage your Google Classroom class rosters",
+      "service": "Classroom",
+      "access_type": "read_write",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/classroom.profile.emails",
+      "api": "Classroom API",
+      "api_version": "v1",
+      "description": "View the email addresses of people in your classes",
+      "service": "Classroom",
+      "access_type": "read",
+      "google_classification": "sensitive"
+    },
+    {
+      "scope": "https://www.googleapis.com/auth/classroom.coursework.students",
+      "api": "Classroom API",
+      "api_version": "v1",
+      "description": "Manage course work and grades for students in your Google Classroom classes",
+      "service": "Classroom",
+      "access_type": "read_write",
+      "google_classification": "sensitive"
+    }
+  ]
+}

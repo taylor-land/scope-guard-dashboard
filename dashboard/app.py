@@ -6,12 +6,12 @@ OAuth Scope Risk Dashboard — v2 (no live risk features while building)
      live risk-feature boxes have been removed from this page — nothing about
      the model's view of the combination is shown until it's submitted.
   2. Result page (after "Submit Scope Combination"): model prediction (from
-     logreg_model.joblib) mapped to low/medium/high/critical, styled like the
+     model.joblib) mapped to low/medium/high/critical, styled like the
      ScopeGuard prototype, plus a SHAP feature-impact chart (seaborn/viridis).
      Anchor + "explain
      this to me" are left as empty placeholders for now, as instructed.
 """
-
+from dotenv import load_dotenv
 from pathlib import Path
 import ctypes
 import gc
@@ -20,11 +20,15 @@ import threading
 import time
 import warnings
 import sys
+import pickle
+import json
+import copy
 
 import joblib
 import numpy as np
 import pandas as pd
 import streamlit as st
+from alibi.saving import load_explainer
 
 from langchain_classic import LLMChain
 from langchain_classic.prompts import (
@@ -39,6 +43,8 @@ try:
 except ImportError:  # pragma: no cover
     psutil = None
 
+load_dotenv()
+API_KEY = os.getenv("API_KEY")
 # The bundled model was fit on a plain numpy array (no column names), so
 # sklearn warns every time it's called with a DataFrame instead — harmless,
 # but noisy enough in a UI with repeated predictions to be worth silencing
@@ -63,19 +69,17 @@ try:
 except ImportError:  # pragma: no cover
     shap = None
 
-try:
-    import dill
-except ImportError:  # pragma: no cover
-    dill = None
 
-API_KEY = st.secrets["API_KEY"] # insert your own api key here
+#API_KEY = st.secrets["API_KEY"] # insert your own api key here
 
-from scopes_data import SERVICE_SCOPES
-from preprocessing import onehot_encoding, describe_feature, OFFLINE_FEATURE
+from describe_scopes import describe_feature
 
-BASE_DIR = Path(__file__).resolve().parent
-MODEL_PATH = BASE_DIR / "logreg_model.joblib"
-ANCHOR_EXPLAINER_PATH = BASE_DIR / "anchor_explainer.dill"
+MODEL_PATH ="pipeline/outputs/best_model.joblib"
+ANCHOR_EXPLAINER_PATH = "anchor/outputs/anchor_explainer"
+SCOPE_BINARIZER_PATH = "pipeline/outputs/scope_binarizer.joblib"
+SERVICE_BINARIZER_PATH = "pipeline/outputs/service_binarizer.joblib"
+SCOPES_BY_SERVICE_PATH = "dataset_creation/outputs/scopes_by_service.json"
+SERVICE_SCOPES_DESCRIPTIVE_PATH = 'dataset_creation/outputs/service_scopes_descriptive.json'
 
 # ---------------------------------------------------------------------------
 # Page config
@@ -101,7 +105,8 @@ st.markdown(
 # ---------------------------------------------------------------------------
 # Reference / display data
 # ---------------------------------------------------------------------------
-GOOGLE_SCOPES = SERVICE_SCOPES
+with open(SERVICE_SCOPES_DESCRIPTIVE_PATH, 'r') as f:
+    GOOGLE_SCOPES = json.load(f)
 
 CLASSIFICATION_BADGES = {
     "non_sensitive": "🟢 non-sensitive",
@@ -119,7 +124,6 @@ RISK_CLASS_DESCRIPTIONS = {
     "Critical": "Full access to email or admin with persistence, or broad multi-service access with high privileges. Maximum damage potential.",
 }
 
-
 def scope_meta_line(entry: dict) -> str:
     parts = [CLASSIFICATION_BADGES.get(entry.get("classification"), "")]
     if entry.get("sensitivity") is not None:
@@ -130,7 +134,6 @@ def scope_meta_line(entry: dict) -> str:
         parts.append("🔁 Transitive")
     return " · ".join(p for p in parts if p)
 
-
 # ---------------------------------------------------------------------------
 # Model loading
 # ---------------------------------------------------------------------------
@@ -138,40 +141,17 @@ def scope_meta_line(entry: dict) -> str:
 def load_model(path: str = str(MODEL_PATH)):
     return joblib.load(path)
 
-
-def _bind_anchor_predictor(explainer, predictor_fn):
-    """Rebind the explainer and its samplers to a predictor closure that uses
-    the currently loaded model."""
-    for attr in ("predictor", "_predictor", "_ohe_predictor"):
-        if hasattr(explainer, attr):
-            setattr(explainer, attr, predictor_fn)
-
-    for sampler in getattr(explainer, "samplers", []) or []:
-        for attr in ("predictor", "_predictor"):
-            if hasattr(sampler, attr):
-                setattr(sampler, attr, predictor_fn)
-
-    return explainer
-
-
 @st.cache_resource
 def load_anchor_explainer(path: str = str(ANCHOR_EXPLAINER_PATH)):
     """Load the pre-fitted alibi AnchorTabular explainer and reattach a
     predictor closure that uses the currently loaded model."""
-    with open(path, "rb") as f:
-        explainer = dill.load(f)
-
-    def _predict_with_loaded_model(x):
-        model = load_model()
-        x_array = np.asarray(x, dtype=float)
-        if x_array.ndim == 1:
-            x_array = x_array.reshape(1, -1)
-        preds = model.predict(x_array)
-        return preds[0] if preds.ndim > 1 and preds.shape[0] == 1 else preds
-
-    return _bind_anchor_predictor(explainer, _predict_with_loaded_model)
-
-
+    model = load_model(MODEL_PATH)
+    def predict_fn(x: np.ndarray) -> np.ndarray:
+        return model.predict(x)
+    explainer = load_explainer(path, predictor=predict_fn)
+    print('loaded')
+    return explainer
+abc = load_anchor_explainer(ANCHOR_EXPLAINER_PATH)
 def _process_memory_mb():
     """Current process resident memory in MB, or None if psutil isn't
     installed. Used purely for diagnosing whether the anchor search (or
@@ -179,7 +159,6 @@ def _process_memory_mb():
     if psutil is None:
         return None
     return psutil.Process(os.getpid()).memory_info().rss / (1024 ** 2)
-
 
 def _trim_memory():
     """Ask glibc to hand freed heap pages back to the OS. Python/CPython
@@ -193,7 +172,6 @@ def _trim_memory():
     except Exception:
         pass
 
-
 # Only one anchor search runs at a time across the whole process. The
 # anchor explainer/model are cached via @st.cache_resource — one shared
 # instance for every session — so two users submitting at the same moment
@@ -201,7 +179,6 @@ def _trim_memory():
 # process, each generating its own perturbed-sample batches and roughly
 # multiplying peak memory by the number of concurrent searches.
 _anchor_search_lock = threading.Lock()
-
 
 def compute_anchor_explanation_with_live_memory(feature_tuple: tuple, status_placeholder=None):
     """Run the (slow) anchor beam search in a background thread and poll
@@ -215,10 +192,11 @@ def compute_anchor_explanation_with_live_memory(feature_tuple: tuple, status_pla
         try:
             with _anchor_search_lock:
                 anchor_explainer = load_anchor_explainer()
+                print('loaded')
                 result_holder["result"] = anchor_explainer.explain(
                     np.array(feature_tuple, dtype=np.int8),
                     threshold=0.90,
-                    coverage_samples=1500,
+                    coverage_samples=2500,
                     batch_size=50,
                     max_anchor_size=7,
                     stop_on_first=True,
@@ -270,13 +248,69 @@ def compute_anchor_explanation_with_live_memory(feature_tuple: tuple, status_pla
 
     return result
 
+def short_name(scope_url):
+    """
+    Turn a full scope URL into a short, readable name for columns/plots.
+        https://www.googleapis.com/auth/gmail.send  ->  gmail.send
+    Bare OIDC scopes (openid, profile, email) are returned unchanged.
+    """
+    url = scope_url.strip()
+    if "/" not in url:
+        return url
+    name = url.rstrip("/").split("/")[-1]
+    return name if name else url
 
 def preprocess_scopes(scope_combination: list, persistence: bool) -> pd.DataFrame:
     """Build the model input: every known scope one-hot encoded plus the
     trailing 'offline' flag, in the exact column order the model expects."""
-    return onehot_encoding(scope_combination, persistence).reset_index(drop=True)
+    #print(f'Scope combination: {scope_combination}')
 
+    scope_binarizer = joblib.load(SCOPE_BINARIZER_PATH)
+    service_binarizer = joblib.load(SERVICE_BINARIZER_PATH)
 
+    # service_catalog_path contains a json file that shows scopes their service:
+    with open(SCOPES_BY_SERVICE_PATH, encoding="utf-8") as f:
+        service_catalog = json.load(f)
+    # pulling services from catalog, sorted alphabetically
+    services = sorted(service_catalog.keys())
+    # creating a dict that contains {scope:service} for each scope
+    scope_to_service = {s.strip(): service for service, scopes in service_catalog.items() for s in scopes}
+
+    # creating onehot encoded services list first:
+    # for each element in the scope combination, this function checks to find which service the scope belongs to, then adds it to the list.
+    services_accessed = []
+    for scope in copy.deepcopy(scope_combination):
+        services_accessed.append(scope_to_service[scope])
+
+    # now we one hot encode found services:
+    service_matrix = service_binarizer.transform([services_accessed]) #returns np array
+
+    # creating service feature names:
+    service_feature_names = [f"svc:{s}" for s in services]
+
+    # one hot encoding scopes:
+    scope_matrix = scope_binarizer.transform([scope_combination]) # this returns np array
+    #print(f'Scope combination post binarizer{scope_combination}')
+    #print(f'Scope Matrix post binarization{scope_matrix}')
+    #print(f'Classes: {scope_binarizer.classes_}')
+    scope_feature_names = [short_name(s) for s in scope_binarizer.classes_]
+    #print(f'Scope feat names: {scope_feature_names}')
+
+    # checking if persistence is True:
+    if persistence:
+        persistence_matrix = np.array(1).reshape(-1, 1)
+    else:
+        persistence_matrix = np.array(0).reshape(-1, 1)
+
+    # combinding all matrices into one
+    onehot_matrix = np.hstack((scope_matrix, service_matrix,persistence_matrix)).astype(np.int8)
+
+    # exporting datframe:
+    feature_names = scope_feature_names + service_feature_names + ['offline']
+    print(scope_binarizer.classes_)
+    print(feature_names)
+    return pd.DataFrame(onehot_matrix,columns=feature_names)
+    
 @st.cache_resource
 def _shap_background(_feature_columns: tuple):
     """All-zero baseline row (no scopes selected, no offline token) used as
@@ -604,15 +638,21 @@ def render_build_page():
 system_prompt = """
 DO NOT USE PERSONAL PRONOUNS. Refer to the model as the model, not you. You did not make the prediction, the model did.
 You are trying to explain to users with a non techinical background why a model made a desicion to classify a Google OAuth combination + offline acess variable as a certain risk level.
+
 The risk levels are low, medium, high and critical, here are descriptions:
     0 Low: Read-only access to non-sensitive data. Minimal damage potential if the app is compromised,
     1 Medium: Read access to moderately sensitive data or write access to non-sensitive data. Limited damage potential.
     2 High: Write access to sensitive data, persistent access to email or files, or any admin-level scope. Significant damage potential.
     3 Critical: Full access to email or admin with persistence, or broad multi-service access with high privileges. Maximum damage potential.
+
 EXPLAIN WHAT A POSITIVE SHAP VALUE IS, something brief but along the lines of it increasing the models confidence that a scope combination is a certain risk tier. Vice versa for negative.
-You are the models prediction, and the scopes. Summarize why the model made the prediction it did using these.
+You are given the models prediction, and the scopes. Summarize why the model made the prediction it did using these.
+
 Keep responces to the point. Include specifically the most infulential positive shap value feature. Include brief descirption of what that feature does.
-IF there are any negative shap values MAKE SURE TO STATE them.  Round off all shap values to thousandith place
+IF there are any negative shap values MAKE SURE TO STATE them.  MAKE SURE TO ROUND SHAP VALUES TO 3 DECIMAL PLACES
+
+Only negative means negative: a shap score only negativly influences a prediction if its negative. A low, but positive, shap value DOES NOT negativley impact a prediction.
+
         """
 model = 'llama-3.1-8b-instant'
 groq_chat = ChatGroq(
@@ -626,66 +666,69 @@ def render_result_page():
     st.title("Result")
     render_memory_box()
 
-    features = preprocess_scopes(st.session_state.scopes, st.session_state.persistence)
+    scope_list = []
+    for dict in st.session_state.scopes:
+        scope_list.append(dict['scope_url'])
+    features = preprocess_scopes(scope_list, st.session_state.persistence)
 
-    try:
-        model = load_model()
-        prediction = int(model.predict(features.values)[0])
-        tier = RISK_LABELS.get(prediction, f"Unknown ({prediction})")
-        color = RISK_COLORS.get(tier, "#546E7A")
+    
+    model = load_model()
+    prediction = int(model.predict(features.values)[0])
+    tier = RISK_LABELS.get(prediction, f"Unknown ({prediction})")
+    color = RISK_COLORS.get(tier, "#546E7A")
 
-        st.markdown(
-            f"""
-            <div class="verdict-banner" style="background:{color};">
-              <div class="vlabel">Predicted Risk</div>
-              <div class="vtier">{tier}</div>
-              <div class="vsub">Model output class {prediction} → {tier} risk</div>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
+    st.markdown(
+        f"""
+        <div class="verdict-banner" style="background:{color};">
+            <div class="vlabel">Predicted Risk</div>
+            <div class="vtier">{tier}</div>
+            <div class="vsub">Model output class {prediction} → {tier} risk</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
-        col_shap, col_anchor = st.columns(2)
+    col_shap, col_anchor = st.columns(2)
 
-        with col_shap:
-            st.markdown("**Why — SHAP**")
-            with st.expander("📊 SHAP feature impact", expanded=False):
-                if shap is None:
-                    st.warning("Unable to render SHAP waterfall (shap is not installed).")
-                else:
-                    try:
-                        exp = class_shap_explanation(model, features, prediction)
-                        fig, plot_df = plot_shap_barh(exp, max_display=12)
-                        st.pyplot(fig, clear_figure=True)
-                        plt.close(fig)
-                    except Exception as shap_error:
-                        st.warning(f"Unable to render SHAP chart ({shap_error}).")
+    with col_shap:
+        st.markdown("**Why — SHAP**")
+        with st.expander("📊 SHAP feature impact", expanded=False):
+            if shap is None:
+                st.warning("Unable to render SHAP waterfall (shap is not installed).")
+            else:
+                try:
+                    exp = class_shap_explanation(model, features, prediction)
+                    fig, plot_df = plot_shap_barh(exp, max_display=12)
+                    st.pyplot(fig, clear_figure=True)
+                    plt.close(fig)
+                except Exception as shap_error:
+                    st.warning(f"Unable to render SHAP chart ({shap_error}).")
 
-        with col_anchor:
-            st.markdown("**The Rule — Anchor**")
-            with st.expander("🔗 Anchor rule", expanded=False):
-                if dill is None:
-                    st.warning("Unable to compute the anchor rule (dill is not installed).")
-                else:
-                    try:
-                        feature_tuple = tuple(features.values[0].astype(float))
-                        status_placeholder = st.empty()
-                        anchor_exp = compute_anchor_explanation_with_live_memory(
-                            feature_tuple, status_placeholder
-                        )
-                        render_anchor_explanation(anchor_exp, features)
-                        del anchor_exp
-                        gc.collect()
-                        _trim_memory()
-                    except Exception:
-                        st.info("Anchor rule is temporarily unavailable for this model.")
+    with col_anchor:
+        st.markdown("**The Rule — Anchor**")
+        with st.expander("🔗 Anchor rule", expanded=False):
+            try:
+                feature_tuple = tuple(features.values[0].astype(np.int8))
+                status_placeholder = st.empty()
+                anchor_exp = compute_anchor_explanation_with_live_memory(
+                    feature_tuple, status_placeholder
+                )
+                print('3')
+                render_anchor_explanation(anchor_exp, features)
+                print('4')
+                del anchor_exp
+                print('5')
+                gc.collect()
+                print('6')
+                _trim_memory()
+                print('7')
+            except Exception:
+                    st.info("Anchor rule is temporarily unavailable for this model.")
 
-        with st.expander("Risk class descriptions", expanded=False):
-            for label in ("Low", "Medium", "High", "Critical"):
-                st.markdown(f"**{label}:** {RISK_CLASS_DESCRIPTIONS[label]}")
+    with st.expander("Risk class descriptions", expanded=False):
+        for label in ("Low", "Medium", "High", "Critical"):
+            st.markdown(f"**{label}:** {RISK_CLASS_DESCRIPTIONS[label]}")
 
-    except Exception as e:
-        st.warning(f"Model/preprocessing pipeline error ({e}). Showing placeholder output instead.")
 
     st.divider()
     st.markdown("**Plain Language Explanations**")
