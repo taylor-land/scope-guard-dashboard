@@ -70,7 +70,7 @@ except ImportError:  # pragma: no cover
     shap = None
 
 
-#API_KEY = st.secrets["API_KEY"] # insert your own api key here
+API_KEY = st.secrets["API_KEY"] # insert your own api key here
 
 from describe_scopes import describe_feature
 
