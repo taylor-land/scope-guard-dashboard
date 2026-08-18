@@ -1,0 +1,70 @@
+{
+  "best_params": {
+    "LogisticRegression": {
+      "C": 1.4363502971184063,
+      "max_iter": 197,
+      "random_state": 42,
+      "solver": "lbfgs",
+      "tol": 0.0007969454818643932
+    },
+    "RandomForest": {
+      "max_depth": 9,
+      "max_features": 48,
+      "min_samples_leaf": 2,
+      "min_samples_split": 4,
+      "n_estimators": 855,
+      "n_jobs": 1,
+      "random_state": 42
+    },
+    "XGBoost": {
+      "colsample_bytree": 0.6015820762861832,
+      "eval_metric": "mlogloss",
+      "gamma": 1.652926756239574e-06,
+      "learning_rate": 0.054383826441124175,
+      "max_depth": 3,
+      "min_child_weight": 2,
+      "n_estimators": 790,
+      "nthread": 1,
+      "random_state": 42,
+      "reg_alpha": 1.847879594650043e-06,
+      "reg_lambda": 2.9950157117856824e-05,
+      "subsample": 0.501763737679885,
+      "tree_method": "hist"
+    }
+  },
+  "cv_folds": 5,
+  "encoding": "A",
+  "environment": {
+    "matplotlib": "3.10.9",
+    "numpy": "1.26.4",
+    "optuna": "4.9.0",
+    "pandas": "2.3.3",
+    "python": "3.11.15",
+    "scikit-learn": "1.8.0",
+    "seaborn": "0.13.2",
+    "shap": "0.49.1",
+    "xgboost": "1.7.6"
+  },
+  "input_path": "../dataset_cleaning/outputs/scope_guard_dataset_cleaned.csv",
+  "n_features": 138,
+  "n_optuna_trials": 100,
+  "n_rows": 1664,
+  "random_seed": 42,
+  "selected_model": "XGBoost",
+  "split_fingerprint": {
+    "test": "4832090379555402335",
+    "train": "15722290784213512302",
+    "val": "5765048248271699534"
+  },
+  "split_sizes": {
+    "test": 250,
+    "train": 1164,
+    "val": 250
+  },
+  "test_metrics": {
+    "accuracy": 0.98,
+    "macro_f1": 0.9814751275550726,
+    "macro_precision": 0.9835531878910874,
+    "macro_recall": 0.9795297748729122
+  }
+}

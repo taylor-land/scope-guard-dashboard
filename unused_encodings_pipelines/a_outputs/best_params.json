@@ -1,0 +1,33 @@
+{
+  "LogisticRegression": {
+    "C": 1.4363502971184063,
+    "max_iter": 197,
+    "random_state": 42,
+    "solver": "lbfgs",
+    "tol": 0.0007969454818643932
+  },
+  "RandomForest": {
+    "max_depth": 9,
+    "max_features": 48,
+    "min_samples_leaf": 2,
+    "min_samples_split": 4,
+    "n_estimators": 855,
+    "n_jobs": 1,
+    "random_state": 42
+  },
+  "XGBoost": {
+    "colsample_bytree": 0.6015820762861832,
+    "eval_metric": "mlogloss",
+    "gamma": 1.652926756239574e-06,
+    "learning_rate": 0.054383826441124175,
+    "max_depth": 3,
+    "min_child_weight": 2,
+    "n_estimators": 790,
+    "nthread": 1,
+    "random_state": 42,
+    "reg_alpha": 1.847879594650043e-06,
+    "reg_lambda": 2.9950157117856824e-05,
+    "subsample": 0.501763737679885,
+    "tree_method": "hist"
+  }
+}
