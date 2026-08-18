@@ -654,7 +654,7 @@ IF there are any negative shap values MAKE SURE TO STATE them.  MAKE SURE TO ROU
 Only negative means negative: a shap score only negativly influences a prediction if its negative. A low, but positive, shap value DOES NOT negativley impact a prediction.
 
         """
-model = 'llama-3.1-8b-instant'
+model = "openai/gpt-oss-20b"
 groq_chat = ChatGroq(
             groq_api_key=API_KEY, 
             model_name=model
