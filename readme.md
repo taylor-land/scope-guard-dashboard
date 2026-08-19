@@ -72,14 +72,13 @@ Overview of the file structure and what each file does.
 
 | File | Description |
 |---|---|
-| `best_model.joblib` | Best-performing model (XGBoost), exported. Used to generate the anchor explainer in `anchor/fit_anchor_explainer.py`, and in `dashboard/app.py`. |
-| `best_shap_scope_explanation.png` | SHAP explanation generated using XGBoost. |
-| `confusion_matrix.png` | Confusion matrix for XGBoost on the testing set. |
+| `best_model.joblib` | Best-performing model (Logreg), exported. Used to generate the anchor explainer in `anchor/fit_anchor_explainer.py`, and in `dashboard/app.py`. |
+| `best_shap_scope_explanation.png` | SHAP explanation generated using logreg. |
+| `confusion_matrix.png` | Confusion matrix for logreg on the testing set. |
 | `optionB_engineered_reference.csv` | Complete engineered feature CSV. *Not used* in the current training pipeline or any other file. |
 | `scope_binarizer.joblib` | `MultiLabelBinarizer` object fit for encoding scopes. Used in `dashboard/app.py`. |
 | `scope_guard_dataset_optionB.csv` | One-hot encoded full dataset — includes scope ID, method of creation, actual scope combination, description, full one-hot encoded data, and risk label. *Not used* in any other file. |
 | `scope_vocabulary.json` | Maps each shortened scope name back to its full URL. *Not used* in any other file. |
-| `secondbest_shap_scope_explanation.png` | SHAP plot for the second-best model (logistic regression), on the same scope combination as `best_shap_scope_explanation.png`. *Not used* in any other file. |
 | `service_binarizer.joblib` | Binarizer for services. Used in `dashboard/app.py`. |
 | `X_train.csv` | Full one-hot encoded `X_train` the model is trained on. Used in `anchor/fit_anchor_explainer.py` to create the anchor explainer object. |
 
@@ -102,6 +101,7 @@ Overview of the file structure and what each file does.
 | `app.py` | Dashboard for the model — allows users to view risk predictions and explanations for predictions. **Requires an API key inserted into `API_KEY` to run.** |
 | `describe_scopes.py` | Helper functions used in `app.py` to generate descriptions of scopes. |
 
+## `unused_encodings_pipelines/`
 ## License
 
 MIT License © 2026 Taylor Land & Imtiaz Ahmad, PhD
