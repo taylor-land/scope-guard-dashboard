@@ -102,6 +102,7 @@ Overview of the file structure and what each file does.
 | `describe_scopes.py` | Helper functions used in `app.py` to generate descriptions of scopes. |
 
 ## `unused_encodings_pipelines/`
+Contains legacy encodings, not used in any other file
 ## License
 
 MIT License © 2026 Taylor Land & Imtiaz Ahmad, PhD
